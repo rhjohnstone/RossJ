@@ -6,7 +6,7 @@ The RossJ project code needs to be included in the `projects` folder of the main
 
 ```bash
 cd $CHASTE_SOURCE_DIR/projects
-ln -s $PYCHASTE_PROJECT_SOURCE_DIR
+ln -s $ROSSJ_PROJECT_SOURCE_DIR
 ```
 
 or just by copying the project in. To build, create a build directory outside the source tree and proceed as:
