@@ -20,3 +20,6 @@ find_package(Chaste COMPONENTS heart)
 # Change the project name in the line below to match the folder this file is in,
 # i.e. the name of your project.
 chaste_do_project(RossJ)
+
+# Include the Python wrapping build logic
+include(${CMAKE_CURRENT_SOURCE_DIR}/WrapPython.cmake)

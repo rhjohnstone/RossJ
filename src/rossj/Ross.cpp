@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2005-2016, University of Oxford.
+Copyright (c) 2005-2012, University of Oxford.
 All rights reserved.
 
 University of Oxford means the Chancellor, Masters and Scholars of the
@@ -33,20 +33,31 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "Hello.hpp"
+#include "Ross.hpp"
 #include "Exception.hpp"
 
-Hello::Hello(const std::string& rMessage)
-    : mMessage(rMessage)
+Ross::Ross(const std::string& rMessage)
+    : mMessage(rMessage),
+      mVector(std::vector<double>(3,1.0))
 {
 }
 
-std::string Hello::GetMessage()
+std::string Ross::GetMessage()
 {
     return mMessage;
 }
 
-void Hello::Complain(const std::string& rComplaint)
+void Ross::Complain(const std::string& rComplaint)
 {
     EXCEPTION(rComplaint);
+}
+
+void Ross::SetVector(std::vector<double> vectorInput)
+{
+    mVector = vectorInput;
+}
+
+std::vector<double> Ross::GetVector()
+{
+    return mVector;
 }
