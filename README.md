@@ -14,8 +14,8 @@ or just by copying the project in. To build, create a build directory outside th
 ```bash
 cd $BUILD_DIR
 cmake $CHASTE_SOURCE_DIR
-make project_PyChaste
-make project_PyChaste_Python
+make project_RossJ
+make project_RossJ_Python
 ``` 
 
 ## Usage
