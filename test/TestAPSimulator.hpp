@@ -66,9 +66,29 @@ public:
     void TestAPSimulatorClass() throw(Exception)
     {
         unsigned model_number = 1u;
-        unsigned protocol_number = 1u;
+        std::cout << "model_number = " << model_number << std::endl << std::flush;
+        
+        double stimulus_magnitude = -25;
+        double stimulus_duration = 2;
+        double stimulus_period = 1000;
+        double stimulus_start_time = 0;
     
-        APSimulator(model_number,protocol_number);
+        APSimulator simulator;
+        
+        std::vector<std::string> parameter_metanames = simulator.GetParameterMetanames();
+        for (unsigned i=0; i<parameter_metanames.size(); i++)
+        {
+            std::cout << parameter_metanames[i] << std::endl << std::flush;
+        }
+        
+        simulator.DefineStimulus(stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time);
+        simulator.DefineModel(model_number);
+        
+        parameter_metanames = simulator.GetParameterMetanames();
+        for (unsigned i=0; i<parameter_metanames.size(); i++)
+        {
+            std::cout << parameter_metanames[i] << std::endl << std::flush;
+        }
 
     }
 };

@@ -14,14 +14,38 @@
 #include "ArchiveLocationInfo.hpp"
 
 //#include "HodgkinHuxley1952CvodeDataClamp.hpp"
+//#include "HodgkinHuxley1952Cvode.hpp"
+#include "hodgkin_huxley_squid_axon_model_1952_modifiedCvode.hpp"
 
-APSimulator::APSimulator(unsigned model_number,
-                         unsigned protocol_number)
-    : mModelNumber(model_number),
-      mProtocolNumber(protocol_number)
+APSimulator::APSimulator()
 {
 }
 
 APSimulator::~APSimulator()
 {
+}
+
+void APSimulator::DefineStimulus(double stimulus_magnitude,
+                                 double stimulus_duration,
+                                 double stimulus_period,
+                                 double stimulus_start_time)
+{
+    mpStimulus.reset(new RegularStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time));
+}
+
+void APSimulator::DefineModel(unsigned model_number)
+{
+    boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
+    if (model_number == 1u)
+    {
+        mpModel.reset(new Cellhodgkin_huxley_squid_axon_model_1952_modifiedFromCellMLCvode(p_solver, mpStimulus));
+        mParameterMetanames.push_back("membrane_fast_sodium_current_conductance"); // 120
+        mParameterMetanames.push_back("membrane_potassium_current_conductance"); // 36
+        mParameterMetanames.push_back("membrane_leakage_current_conductance"); // 0.3
+    }
+}
+
+std::vector<std::string> APSimulator::GetParameterMetanames()
+{
+    return mParameterMetanames;
 }
