@@ -27,7 +27,7 @@ The package can be imported in Python as normal. For example, in a Python sessio
 ```python
 >>> import rossj
 >>> ross = rossj.RossManual("hello")
->>> print rossj.GetMessage()
+>>> print ross.GetMessage()
 
 hello
 ```
