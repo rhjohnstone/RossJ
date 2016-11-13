@@ -1,2 +1,2 @@
 TestAPSimulator.hpp
-TestModulePython.py
+python/TestModulePython.py
