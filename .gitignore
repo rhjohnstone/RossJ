@@ -1,0 +1,12 @@
+*.so
+*.pyc
+*.project
+*.cproject
+*~
+*.autotools
+*.pydevproject
+dynamic/exposed_decl*
+src/python/chaste/projects/*
+src/python/build*
+src/python/dist*
+src/python/chaste.egg-info*
