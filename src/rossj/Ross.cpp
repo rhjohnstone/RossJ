@@ -61,3 +61,12 @@ std::vector<double> Ross::GetVector()
 {
     return mVector;
 }
+
+std::vector<double> Ross::TimesByTwo(std::vector<double> rVector)
+{
+    for (unsigned i=0; i<rVector.size(); i++)
+    {
+        rVector[i] *= 2;
+    }
+    return rVector;
+}

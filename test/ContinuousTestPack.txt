@@ -1,2 +1,3 @@
 TestAPSimulator.hpp
 python/TestModulePython.py
+python/TestCompareStdOut.py

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2005-2012, University of Oxford.
+Copyright (c) 2005-2015, University of Oxford.
 All rights reserved.
 
 University of Oxford means the Chancellor, Masters and Scholars of the
@@ -33,62 +33,46 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef ROSS_HPP_
-#define ROSS_HPP_
-
-#include <string>
-#include <vector>
-
 /**
- * This is a demo class for demonstrating Python wrapping
+ * @file
+ *
+ * This file gives an example of how you can create your own executable
+ * in a user project.
  */
-class Ross
+
+#include <iostream>
+#include <string>
+
+#include "ExecutableSupport.hpp"
+#include "Exception.hpp"
+#include "PetscTools.hpp"
+#include "PetscException.hpp"
+#include "TimesByTwoRunner.hpp"
+
+int main(int argc, char *argv[])
 {
-private:
+    // This sets up PETSc and prints out copyright information, etc.
+    ExecutableSupport::StandardStartup(&argc, &argv);
 
-    /**
-     * A message to be returned
-     */
-    std::string mMessage;
+    int exit_code = ExecutableSupport::EXIT_OK;
 
-    /**
-     * A vector of doubles
-     */
-    std::vector<double> mVector;
+    // You should put all the main code within a try-catch, to ensure that
+    // you clean up PETSc before quitting.
+    try
+    {
+        TimesByTwoRunner runner;
+    }
+    catch (const Exception& e)
+    {
+        ExecutableSupport::PrintError(e.GetMessage());
+        exit_code = ExecutableSupport::EXIT_ERROR;
+    }
 
-public:
-
-    /**
-     * Constructor
-     * @param rMessage an input message
-     */
-    Ross(const std::string& rMessage);
+	// Optional - write the machine info to file.
+    ExecutableSupport::WriteMachineInfoFile("machine_info");
     
-    /**
-     * Return the message
-     * @return return the input message
-     */
-    std::string GetMessage();
-
-    /**
-     * Throw and exception with the complaint message
-     * @param rComplaint the input message
-     */
-    void Complain(const std::string& rComplaint);
-
-    /**
-     * Set a vector of doubles
-     * @param vectorInput the input vector
-     */
-    void SetVector(std::vector<double> vectorInput);
-
-    /**
-     * Return the vector of doubles
-     * @return the vector of doubles
-     */
-    std::vector<double> GetVector();
-    
-    std::vector<double> TimesByTwo(std::vector<double> rVector);
-};
-
-#endif /*ROSS_HPP_*/
+    // End by finalizing PETSc, and returning a suitable exit code.
+    // 0 means 'no error'
+    ExecutableSupport::FinalizePetsc();
+    return exit_code;
+}

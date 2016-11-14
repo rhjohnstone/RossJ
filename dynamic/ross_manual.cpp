@@ -120,6 +120,7 @@ BOOST_PYTHON_MODULE(_chaste_project_RossJ_ross_manual)
         .def("SetVector", &Ross::SetVector)
         .def("GetVector", &Ross::GetVector)
         .def("Complain", &Ross::Complain)
+        .def("TimesByTwo", &Ross::TimesByTwo)
     ;
 
     PythonIterableToStl()
