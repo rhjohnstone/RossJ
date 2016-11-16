@@ -89,6 +89,8 @@ list (APPEND ROSSJ_PYTHON_MODULES hello_manual)
 list (APPEND ROSSJ_PYTHON_MODULE_LOCATIONS ${CMAKE_CURRENT_BINARY_DIR}/python/tutorial/)
 list (APPEND ROSSJ_PYTHON_MODULES ross_manual) # added manually by RJ
 list (APPEND ROSSJ_PYTHON_MODULE_LOCATIONS ${CMAKE_CURRENT_BINARY_DIR}/python/rossj/) # added manually by RJ
+list (APPEND ROSSJ_PYTHON_MODULES ap_simulator) # added manually by RJ
+list (APPEND ROSSJ_PYTHON_MODULE_LOCATIONS ${CMAKE_CURRENT_BINARY_DIR}/python/ap_simulator/) # added manually by RJ
 
 # Copy the Python package (i.e. all source files etc) to the build folder, ignore any shared libraries that might be in there.
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/python/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/python/ PATTERN "*.so" EXCLUDE)

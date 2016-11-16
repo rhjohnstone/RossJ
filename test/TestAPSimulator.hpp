@@ -75,21 +75,49 @@ public:
     
         APSimulator simulator;
         
+        simulator.DefineStimulus(stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time);
+        simulator.DefineModel(model_number);
+        
         std::vector<std::string> parameter_metanames = simulator.GetParameterMetanames();
         for (unsigned i=0; i<parameter_metanames.size(); i++)
         {
             std::cout << parameter_metanames[i] << std::endl << std::flush;
         }
+
+    }
+    void TestAPSolve() throw(Exception)
+    {
+        unsigned model_number = 1u;
+        
+        double stimulus_magnitude = -25;
+        double stimulus_duration = 2;
+        double stimulus_period = 1000;
+        double stimulus_start_time = 0;
+    
+        APSimulator simulator;
         
         simulator.DefineStimulus(stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time);
         simulator.DefineModel(model_number);
-        
-        parameter_metanames = simulator.GetParameterMetanames();
-        for (unsigned i=0; i<parameter_metanames.size(); i++)
-        {
-            std::cout << parameter_metanames[i] << std::endl << std::flush;
-        }
 
+        
+        
+        std::vector<double> HH_parameter_values;
+        HH_parameter_values.push_back(120);
+        HH_parameter_values.push_back(36);
+        HH_parameter_values.push_back(0.3);
+        
+        double start_time = 0;
+        double end_time = 200;
+        
+        
+        
+        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(HH_parameter_values, start_time, end_time);
+        std::cout << "voltage_trace.size() = " << voltage_trace.size() << std::endl << std::flush;
+        for (unsigned i=0; i<voltage_trace.size()-1; i++)
+        {
+            std::cout << voltage_trace[i] << " ";
+        }
+        std::cout << voltage_trace.back() << std::endl << std::flush;
     }
 };
 

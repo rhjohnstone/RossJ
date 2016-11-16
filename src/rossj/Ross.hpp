@@ -89,6 +89,8 @@ public:
     std::vector<double> GetVector();
     
     std::vector<double> TimesByTwo(std::vector<double> rVector);
+    
+    
 };
 
 #endif /*ROSS_HPP_*/

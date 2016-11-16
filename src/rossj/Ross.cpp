@@ -70,3 +70,5 @@ std::vector<double> Ross::TimesByTwo(std::vector<double> rVector)
     }
     return rVector;
 }
+
+
