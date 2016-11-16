@@ -16,8 +16,7 @@
 #include "hodgkin_huxley_squid_axon_model_1952_modifiedCvode.hpp"
 
 APSimulator::APSimulator()
-    : mSamplingTimestep(0.25),
-      mNumberOfFailedSolves(0),
+    : mNumberOfFailedSolves(0),
       mHowManySolves(1)
 {
 }
@@ -44,6 +43,7 @@ void APSimulator::DefineModel(unsigned model_number)
         mParameterMetanames.push_back("membrane_potassium_current_conductance"); // 36
         mParameterMetanames.push_back("membrane_leakage_current_conductance"); // 0.3
     }
+    mpModel->SetMaxSteps(10000);
 }
 
 std::vector<std::string> APSimulator::GetParameterMetanames()
@@ -51,7 +51,7 @@ std::vector<std::string> APSimulator::GetParameterMetanames()
     return mParameterMetanames;
 }
 
-std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time)
+std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time, double sampling_timestep)
 {
     std::vector<double> voltage_trace;
 
@@ -66,11 +66,11 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
         {
             for (unsigned i=0; i<mHowManySolves-1; i++)
             {
-                mpModel->Compute(start_time, end_time, mSamplingTimestep);
+                mpModel->Compute(start_time, end_time, sampling_timestep);
             }
         }
 
-        OdeSolution sol1 = mpModel->Compute(start_time, end_time, mSamplingTimestep); // Do I need a good way to kill everything if this fails to solve?
+        OdeSolution sol1 = mpModel->Compute(start_time, end_time, sampling_timestep); // Do I need a good way to kill everything if this fails to solve?
         voltage_trace = sol1.GetAnyVariable("membrane_voltage");
     }
     catch (Exception &e)
@@ -81,4 +81,9 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
         mNumberOfFailedSolves++;
     }
     return voltage_trace;
+}
+
+void APSimulator::SetTolerances(double rel_tol, double abs_tol)
+{
+    mpModel->SetTolerances(rel_tol, abs_tol);
 }

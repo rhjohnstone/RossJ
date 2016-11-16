@@ -108,10 +108,11 @@ public:
         
         double start_time = 0;
         double end_time = 200;
+        double sampling_timestep = 0.2;
         
         
         
-        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(HH_parameter_values, start_time, end_time);
+        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(HH_parameter_values, start_time, end_time, sampling_timestep);
         std::cout << "voltage_trace.size() = " << voltage_trace.size() << std::endl << std::flush;
         for (unsigned i=0; i<voltage_trace.size()-1; i++)
         {

@@ -14,7 +14,6 @@ private:
     std::vector<std::string> mParameterMetanames;
     std::vector<double> mExptTimes;
     std::vector<double> mExptTrace;
-    double mSamplingTimestep;
     unsigned mNumberOfFailedSolves;
     unsigned mHowManySolves;
 public:
@@ -26,7 +25,8 @@ public:
                         double stimulus_start_time);
     void DefineModel(unsigned model_number);
     std::vector<std::string> GetParameterMetanames();
-    std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time);
+    std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time, double sampling_timestep);
+    void SetTolerances(double rel_tol, double abs_tol);
 };
 
 
