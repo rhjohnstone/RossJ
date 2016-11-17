@@ -47,7 +47,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Exception.hpp"
 #include "PetscTools.hpp"
 #include "PetscException.hpp"
-#include "TimesByTwoRunner.hpp"
+#include "APRunner.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     // you clean up PETSc before quitting.
     try
     {
-        TimesByTwoRunner runner;
+        APRunner runner;
     }
     catch (const Exception& e)
     {

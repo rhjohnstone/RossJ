@@ -89,10 +89,10 @@ public:
     {
         unsigned model_number = 1u;
         
-        double stimulus_magnitude = -25;
+        double stimulus_magnitude = -25.5;
         double stimulus_duration = 2;
         double stimulus_period = 1000;
-        double stimulus_start_time = 0;
+        double stimulus_start_time = 10;
     
         APSimulator simulator;
         
@@ -100,19 +100,23 @@ public:
         simulator.DefineModel(model_number);
 
         
+        double end_time;
+        std::vector<double> params;
+        if (model_number==1u)
+        {
+            params.push_back(120);
+            params.push_back(36);
+            params.push_back(0.3);
+            end_time = 80;
+        }
         
-        std::vector<double> HH_parameter_values;
-        HH_parameter_values.push_back(120);
-        HH_parameter_values.push_back(36);
-        HH_parameter_values.push_back(0.3);
         
         double start_time = 0;
-        double end_time = 200;
         double sampling_timestep = 0.2;
         
         
         
-        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(HH_parameter_values, start_time, end_time, sampling_timestep);
+        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(params, start_time, end_time, sampling_timestep);
         std::cout << "voltage_trace.size() = " << voltage_trace.size() << std::endl << std::flush;
         for (unsigned i=0; i<voltage_trace.size()-1; i++)
         {

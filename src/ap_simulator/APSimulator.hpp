@@ -27,6 +27,7 @@ public:
     std::vector<std::string> GetParameterMetanames();
     std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time, double sampling_timestep);
     void SetTolerances(double rel_tol, double abs_tol);
+    double ExampleLogLikelihoodFunction(const std::vector<double>& test_trace);
 };
 
 

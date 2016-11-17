@@ -33,11 +33,11 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#ifndef TIMESBYTWORUNNER_HPP_
-#define TIMESBYTWORUNNER_HPP_
+#ifndef APRUNNER_HPP_
+#define APRUNNER_HPP_
 
 #include "CommandLineArguments.hpp"
-#include "Ross.hpp"
+#include "APSimulator.hpp"
 
 /**
  * A small class that is used by the McmcApp to do all of its work.
@@ -52,7 +52,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * We want to change it so that the constructor does an ODE solve.
  *
  */
-class TimesByTwoRunner
+class APRunner
 {
 private:
 
@@ -62,15 +62,80 @@ public:
      *
      * Reads command line arguments
      */
-    TimesByTwoRunner()
+    APRunner()
     {
         // Runs our 'reference/experimental' trace.
 
-        std::string message = "Hello world";
-        Ross ross(message);
+        APSimulator simulator;
+        
+        std::string input;
+
+        
+        double stimulus_magnitude;
+        double stimulus_duration;
+        double stimulus_period;
+        double stimulus_start_time;
+        unsigned model_choice;
+        
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> stimulus_magnitude;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> stimulus_duration;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> stimulus_period;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> stimulus_start_time;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> model_choice;
+        }
+        
+        simulator.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time);
+        simulator.DefineModel(model_choice);
+        
+        double solve_start;
+        double solve_end;
+        double sampling_timestep;
+        
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> solve_start;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> solve_end;
+        }
+
+        {
+            std::getline(std::cin, input);
+            std::istringstream is(input);
+            is >> sampling_timestep;
+        }
 
         std::vector<double> theta;
-        std::vector<double> doubled_theta;
+        std::vector<double> test_trace;
+        double example_loglikelihood;
         do
         {
             //wait for theta values from std::in
@@ -86,14 +151,12 @@ public:
             //std::cerr << "input = " << input << std::endl << std::flush;
             std::istringstream is(input);
             theta = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
+           
 
-            doubled_theta = ross.TimesByTwo(theta);
+            test_trace = simulator.SolveForVoltageTraceWithParams(theta, solve_start, solve_end, sampling_timestep);
+            example_loglikelihood = simulator.ExampleLogLikelihoodFunction(test_trace);
 
-            for (unsigned i=0; i<doubled_theta.size()-1; i++)
-            {
-                std::cout << doubled_theta[i] << " ";
-            }
-            std::cout << doubled_theta.back() << std::endl << std::flush;            
+            std::cout << example_loglikelihood << std::endl << std::flush;            
             
         }
         while(true);
@@ -102,4 +165,4 @@ public:
 
 };
 
-#endif /*TIMESBYTWORUNNER_HPP_*/
+#endif /*APRUNNER_HPP_*/
