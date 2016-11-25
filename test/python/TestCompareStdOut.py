@@ -12,7 +12,7 @@ class TestCompareStdOut(unittest.TestCase):
     def test_rossj(self):
         
         
-        model_number = 4
+        model_number = 1
 
         if (model_number == 1):
             params = [120,36,0.3]
@@ -50,7 +50,7 @@ class TestCompareStdOut(unittest.TestCase):
         ap.DefineModel(model_number)
         
         
-        how_many_repeats = 500
+        how_many_repeats = 1
         
         start = time.time()
         for _ in xrange(how_many_repeats):
@@ -59,6 +59,8 @@ class TestCompareStdOut(unittest.TestCase):
             example_loglikelihood_1 = ap.ExampleLogLikelihoodFunction(test_trace)
         time_taken = time.time()-start
         print "\nTime taken by ap_simulator SolveForVoltageTraceWithParams: {} s\n".format(round(time_taken,2))
+        
+        print test_trace
         
         
         #EXE_NAME = "./projects/RossJ/apps/TimesByTwoApp"

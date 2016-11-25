@@ -66,16 +66,11 @@ public:
     void TestAPSimulatorClass() throw(Exception)
     {
         unsigned model_number = 1u;
-        std::cout << "model_number = " << model_number << std::endl << std::flush;
-        
-        double stimulus_magnitude = -25;
-        double stimulus_duration = 2;
-        double stimulus_period = 1000;
-        double stimulus_start_time = 0;
+        unsigned protocol_number = 1u;
     
         APSimulator simulator;
         
-        simulator.DefineStimulus(stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time);
+        simulator.DefineProtocol(protocol_number);
         simulator.DefineModel(model_number);
         
         std::vector<std::string> parameter_metanames = simulator.GetParameterMetanames();
@@ -88,35 +83,26 @@ public:
     void TestAPSolve() throw(Exception)
     {
         unsigned model_number = 1u;
-        
-        double stimulus_magnitude = -25.5;
-        double stimulus_duration = 2;
-        double stimulus_period = 1000;
-        double stimulus_start_time = 10;
+        unsigned protocol_number = 1u;
     
         APSimulator simulator;
         
-        simulator.DefineStimulus(stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time);
+        simulator.DefineProtocol(protocol_number);
         simulator.DefineModel(model_number);
 
         
-        double end_time;
         std::vector<double> params;
         if (model_number==1u)
         {
             params.push_back(120);
             params.push_back(36);
             params.push_back(0.3);
-            end_time = 80;
         }
         
         
-        double start_time = 0;
-        double sampling_timestep = 0.2;
         
         
-        
-        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(params, start_time, end_time, sampling_timestep);
+        std::vector<double> voltage_trace = simulator.SolveForVoltageTraceWithParams(params);
         std::cout << "voltage_trace.size() = " << voltage_trace.size() << std::endl << std::flush;
         for (unsigned i=0; i<voltage_trace.size()-1; i++)
         {

@@ -16,16 +16,16 @@ private:
     std::vector<double> mExptTrace;
     unsigned mNumberOfFailedSolves;
     unsigned mHowManySolves;
+    double mSolveStart;
+    double mSolveEnd;
+    double mSolveTimestep;
 public:
     APSimulator();
     ~APSimulator();
-    void DefineStimulus(double stimulus_magnitude,
-                        double stimulus_duration,
-                        double stimulus_period,
-                        double stimulus_start_time);
+    void DefineProtocol(unsigned protocol_number);
     void DefineModel(unsigned model_number);
     std::vector<std::string> GetParameterMetanames();
-    std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams, double start_time, double end_time, double sampling_timestep);
+    std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams);
     void SetTolerances(double rel_tol, double abs_tol);
     double ExampleLogLikelihoodFunction(const std::vector<double>& test_trace);
 };

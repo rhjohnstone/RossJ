@@ -70,36 +70,13 @@ public:
         
         std::string input;
 
-        
-        double stimulus_magnitude;
-        double stimulus_duration;
-        double stimulus_period;
-        double stimulus_start_time;
+        unsigned protocol_choice;
         unsigned model_choice;
-        
 
         {
             std::getline(std::cin, input);
             std::istringstream is(input);
-            is >> stimulus_magnitude;
-        }
-
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> stimulus_duration;
-        }
-
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> stimulus_period;
-        }
-
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> stimulus_start_time;
+            is >> protocol_choice;
         }
 
         {
@@ -108,7 +85,7 @@ public:
             is >> model_choice;
         }
         
-        simulator.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time);
+        simulator.DefineProtocol(protocol_choice);
         simulator.DefineModel(model_choice);
         
         double solve_start;
@@ -153,7 +130,7 @@ public:
             theta = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
            
 
-            test_trace = simulator.SolveForVoltageTraceWithParams(theta, solve_start, solve_end, sampling_timestep);
+            test_trace = simulator.SolveForVoltageTraceWithParams(theta);
             example_loglikelihood = simulator.ExampleLogLikelihoodFunction(test_trace);
 
             std::cout << example_loglikelihood << std::endl << std::flush;            
