@@ -87,28 +87,6 @@ public:
         
         simulator.DefineProtocol(protocol_choice);
         simulator.DefineModel(model_choice);
-        
-        double solve_start;
-        double solve_end;
-        double sampling_timestep;
-        
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> solve_start;
-        }
-
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> solve_end;
-        }
-
-        {
-            std::getline(std::cin, input);
-            std::istringstream is(input);
-            is >> sampling_timestep;
-        }
 
         std::vector<double> theta;
         std::vector<double> test_trace;
