@@ -218,6 +218,6 @@ double APSimulator::ExampleLogLikelihoodFunction(const std::vector<double>& test
         //std::cerr << temp << " ";
         total += temp*temp;
     }
-    //std::cout << std::endl << std::flush;
+    //std::cerr << "APSimulator::ExampleLogLikelihoodFunction: " << total << std::endl << std::flush;
     return total;
 }

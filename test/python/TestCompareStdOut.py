@@ -45,7 +45,7 @@ class TestCompareStdOut(unittest.TestCase):
         ap.DefineModel(model_number)
         
         
-        how_many_repeats = 1
+        how_many_repeats = 1000
         
         start = time.time()
         for _ in xrange(how_many_repeats):
@@ -55,8 +55,15 @@ class TestCompareStdOut(unittest.TestCase):
         time_taken = time.time()-start
         print "\nTime taken by ap_simulator SolveForVoltageTraceWithParams: {} s\n".format(round(time_taken,2))
         
-        #print test_trace
+        start = time.time()
+        for _ in xrange(how_many_repeats):
+            test_trace = ap.SolveForVoltageTraceWithParams(params)
+            numpy_loglikelihood = example_loglikelihood(test_trace)
+        time_taken = time.time()-start
+        print "\nTime taken by numpy example_loglikelihood: {} s\n".format(round(time_taken,2))
         
+        
+        print "numpy_loglikelihood =", numpy_loglikelihood
         
         EXE_NAME = "/home/rossj/chaste-build/projects/RossJ/apps/APApp" # this needs to be more general for chaste build path
         process = subprocess.Popen(EXE_NAME, False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -76,10 +83,10 @@ class TestCompareStdOut(unittest.TestCase):
         start = time.time()
         for _ in xrange(how_many_repeats):
             output_string_to_c = " ".join(map(str, params)) + '\n'
-            print "output_string_to_c =", output_string_to_c
+            #print "output_string_to_c =", output_string_to_c
             process.stdin.write(output_string_to_c)
             from_chaste = process.stdout.readline()
-            print "from_chaste =", from_chaste
+            #print "from_chaste =", from_chaste
             example_loglikelihood_2 = float(from_chaste)
         time_taken = time.time()-start
         print "\nTime taken by APApp: {} s\n".format(round(time_taken,2))
@@ -87,8 +94,9 @@ class TestCompareStdOut(unittest.TestCase):
         if ( example_loglikelihood_1==example_loglikelihood_2 ):
             print "The two outputted 'log-likelihoods' are the same, don't worry."
         else:
-            print example_loglikelihood_1
-            print example_loglikelihood_2
+            print "ap_simulator:", example_loglikelihood_1
+            print "app:         ", example_loglikelihood_2
+            print "numpy:       ", numpy_loglikelihood
 
 
 if __name__ == '__main__':
