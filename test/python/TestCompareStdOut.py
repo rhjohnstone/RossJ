@@ -9,7 +9,7 @@ def example_loglikelihood(x):
 
 class TestCompareStdOut(unittest.TestCase):
 
-    def test_rossj(self):
+    def test_ap_simulator(self):
         
         
         model_number = 1
@@ -55,13 +55,12 @@ class TestCompareStdOut(unittest.TestCase):
         time_taken = time.time()-start
         print "\nTime taken by ap_simulator SolveForVoltageTraceWithParams: {} s\n".format(round(time_taken,2))
         
-        print test_trace
+        #print test_trace
         
         
         EXE_NAME = "/home/rossj/chaste-build/projects/RossJ/apps/APApp" # this needs to be more general for chaste build path
         process = subprocess.Popen(EXE_NAME, False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         PROVENANCE_HEADER = "This version of Chaste was compiled on:"
-	
         reading_values, looking_for_blank = False, False
         while (not reading_values):
             line = process.stdout.readline()

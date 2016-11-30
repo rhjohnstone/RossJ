@@ -26,11 +26,28 @@ APSimulator::APSimulator()
     : mNumberOfFailedSolves(0),
       mHowManySolves(1)
 {
+    //RedirectStdErr();
+    std::cerr << "*** INSIDE CONSTRUCTOR (nothing should happen here) ***" << std::endl << std::flush;
 }
 
 APSimulator::~APSimulator()
 {
+    //fclose(stderr);
 }
+
+/*
+void APSimulator::RedirectStdErr()
+{
+    boost::filesystem::path stderr_dir = "/home/rossj/stderr/"; // should find a better location for this
+    std::string log_file_path = stderr_dir.string() + "stderr.log";
+
+    boost::filesystem::create_directories(stderr_dir);
+
+    std::cerr << stderr_dir << std::endl << std::flush;
+
+    freopen( log_file_path.c_str(), "w", stderr );
+}
+*/
 
 void APSimulator::DefineProtocol(unsigned protocol_number)
 {
@@ -198,9 +215,9 @@ double APSimulator::ExampleLogLikelihoodFunction(const std::vector<double>& test
     for (unsigned i=0; i<test_trace.size(); i++)
     {
         temp = test_trace[i];
-        std::cerr << temp << " ";
+        //std::cerr << temp << " ";
         total += temp*temp;
     }
-    std::cout << std::endl << std::flush;
+    //std::cout << std::endl << std::flush;
     return total;
 }

@@ -67,6 +67,7 @@ public:
         // Runs our 'reference/experimental' trace.
 
         APSimulator simulator;
+        std::cerr << "just constructed new APSimulator" << std::endl << std::flush;
         
         std::string input;
 
@@ -86,13 +87,16 @@ public:
         }
         
         simulator.DefineProtocol(protocol_choice);
+        std::cerr << "just defined protocol" << std::endl << std::flush;
         simulator.DefineModel(model_choice);
+        std::cerr << "just defined model" << std::endl << std::flush;
 
         std::vector<double> theta;
         std::vector<double> test_trace;
         double example_loglikelihood;
         do
         {
+            std::cerr << "inside do/while loop" << std::endl << std::flush;
             //wait for theta values from std::in
             //std::vector<double> theta;
             // std::cin >> theta;
@@ -103,7 +107,7 @@ public:
             {
                 break;
             }
-            //std::cerr << "input = " << input << std::endl << std::flush;
+            std::cerr << "input = " << input << std::endl << std::flush;
             std::istringstream is(input);
             theta = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
            

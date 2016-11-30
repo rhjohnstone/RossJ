@@ -80,7 +80,7 @@ public:
         }
 
     }
-    void TestAPSolve() throw(Exception)
+    void xTestAPSolve() throw(Exception)
     {
         unsigned model_number = 1u;
         unsigned protocol_number = 1u;

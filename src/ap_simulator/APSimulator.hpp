@@ -22,6 +22,7 @@ private:
 public:
     APSimulator();
     ~APSimulator();
+    //void RedirectStdErr();
     void DefineProtocol(unsigned protocol_number);
     void DefineModel(unsigned model_number);
     std::vector<std::string> GetParameterMetanames();
