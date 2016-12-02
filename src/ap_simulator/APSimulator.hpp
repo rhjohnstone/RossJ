@@ -29,6 +29,7 @@ public:
     std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams);
     void SetTolerances(double rel_tol, double abs_tol);
     double ExampleLogLikelihoodFunction(const std::vector<double>& test_trace);
+    std::vector<double> GenerateSyntheticExptTrace(const std::vector<double>& rParams, double noise_sd, double c_seed);
 };
 
 

@@ -78,4 +78,3 @@ def nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed): # synthetic 
 
 
 
-

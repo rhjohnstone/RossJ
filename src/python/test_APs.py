@@ -14,11 +14,13 @@ def example_likelihood_function(trace):
 # 5. O'Hara Rudy
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
-# 8. ten Tusscher (Opt)
 
 for model_number in xrange(1,8):
     #model_number = 4
     protocol_number = 1
+    
+    noise_sd = 0.25
+    c_seed = 1
 
     original_gs, g_parameters = mcmc_setup.get_original_params(model_number)
 
@@ -28,19 +30,11 @@ for model_number in xrange(1,8):
 
     ap.DefineProtocol(protocol_number)
     ap.DefineModel(model_number)
+    expt_trace = ap.GenerateSyntheticExptTrace(original_gs,noise_sd,c_seed)
 
-
-    how_many = 100
-
-    start = time.time()
-    for _ in xrange(how_many):
-        trace = ap.SolveForVoltageTraceWithParams(original_gs)
-    time_taken = time.time()-start
-
-    print "Model {}, time taken for {} solves: {} s".format(model_number,how_many,round(time_taken,2))
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
     #ax.plot(times,trace)
-    ax.plot(trace)
+    ax.plot(expt_trace)
     plt.show(block=True)

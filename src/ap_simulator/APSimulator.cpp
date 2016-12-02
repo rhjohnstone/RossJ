@@ -61,7 +61,7 @@ void APSimulator::DefineProtocol(unsigned protocol_number)
         stimulus_start_time = 20;
         
         mSolveStart = 0;
-        mSolveEnd = 500;
+        mSolveEnd = 400;
         mSolveTimestep = 0.2;
     }
     
@@ -197,7 +197,7 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
     {
         std::cerr << "WARNING: CVODE failed to solve with these parameters" << std::endl << std::flush;
         std::cerr << "error was " << e.GetShortMessage() << std::endl << std::flush;
-        voltage_trace = std::vector<double>(mExptTimes.size(), 0.0);
+        voltage_trace = std::vector<double>(mExptTrace.size(), 0.0);
         mNumberOfFailedSolves++;
     }
     return voltage_trace;
@@ -220,4 +220,18 @@ double APSimulator::ExampleLogLikelihoodFunction(const std::vector<double>& test
     }
     //std::cerr << "APSimulator::ExampleLogLikelihoodFunction: " << total << std::endl << std::flush;
     return total;
+}
+
+std::vector<double> APSimulator::GenerateSyntheticExptTrace(const std::vector<double>& rParams, double noise_sd, double c_seed)
+{
+    std::vector<double> expt_trace = SolveForVoltageTraceWithParams(rParams);
+    RandomNumberGenerator::Instance()->Reseed(c_seed);
+    double random_number;
+    for (unsigned i=0; i<expt_trace.size(); i++)
+    {
+        random_number = RandomNumberGenerator::Instance()->StandardNormalRandomDeviate();
+        expt_trace[i] +=  noise_sd*random_number;
+    }
+    mExptTrace = expt_trace;
+    return expt_trace;
 }

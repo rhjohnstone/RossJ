@@ -71,6 +71,7 @@ BOOST_PYTHON_MODULE(_chaste_project_RossJ_ap_simulator)
         .def("SolveForVoltageTraceWithParams", &APSimulator::SolveForVoltageTraceWithParams)
         .def("SetTolerances", &APSimulator::SetTolerances)
         .def("ExampleLogLikelihoodFunction", &APSimulator::ExampleLogLikelihoodFunction)
+        .def("GenerateSyntheticExptTrace", &APSimulator::GenerateSyntheticExptTrace)
     ;
 
     PythonIterableToStl()
