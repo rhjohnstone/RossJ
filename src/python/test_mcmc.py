@@ -34,6 +34,7 @@ expt_trace = cell.GenerateSyntheticExptTrace(original_gs,noise_sd,c_seed)
 
 sigma_cur = 0.25
 theta_cur = np.copy(original_gs+[sigma_cur])
+mean_estimate = np.copy(theta_cur)
 test_trace = cell.SolveForVoltageTraceWithParams(original_gs)
 log_target_cur = normal_loglikelihood_uniform_priors(test_trace,expt_trace,sigma_cur)
 fig = plt.figure()
@@ -49,8 +50,11 @@ num_params = len(theta_cur)
 
 first_iteration = np.concatenate((theta_cur,[log_target_cur]))
 
+
 loga = 0.
-proposal_covariance = 0.01*np.diag(theta_cur**2)
+initial_proposal_scale = 0.01
+cov_estimate = initial_proposal_scale*np.diag(theta_cur**2)
+
 
 acceptance = 0.
 acceptance_target = 0.25
@@ -75,7 +79,7 @@ mcmc[0,:] = first_iteration
 start = time.time()
 for it in xrange(1,num_total_iterations+1):
     accepted = 0.
-    theta_star = npr.multivariate_normal(theta_cur,np.exp(loga)*proposal_covariance)
+    theta_star = npr.multivariate_normal(theta_cur,np.exp(loga)*cov_estimate)
     if np.all(theta_star>0):
         test_trace = cell.SolveForVoltageTraceWithParams(theta_star[:-1])
         log_target_star = normal_loglikelihood_uniform_priors(test_trace,expt_trace,theta_star[-1])
@@ -91,12 +95,19 @@ for it in xrange(1,num_total_iterations+1):
     if (it>when_to_adapt):
         s = it - when_to_adapt
         gamma_s = 1./(s+1.)**0.6
+        temp_covariance_bit = np.array([theta_cur-mean_estimate])
+        cov_estimate = (1-gamma_s) * cov_estimate + gamma_s * temp_covariance_bit.T.dot(temp_covariance_bit)
+        mean_estimate = (1-gamma_s) * mean_estimate + gamma_s * theta_cur
         loga += gamma_s*(accepted-acceptance_target)
     acceptance = ((it-1.)*acceptance + accepted)/it
     if (it%when_to_update==0):
+        time_taken_so_far = time.time()-start
+        estimated_time_left = time_taken_so_far/it*(num_total_iterations-it)
         print it/when_to_update, "/", how_many_updates
+        print "Time taken: {} s = {} min".format(round(time_taken_so_far,1),round(time_taken_so_far/60.,2))
         print "acceptance:", acceptance
         print "loga:", loga
+        print "Estimated time remaining: {} s = {} min".format(round(estimated_time_left,1),round(estimated_time_left/60.,2))
 time_taken = time.time()-start
 print "Time taken: {} s".format(round(time_taken,2))    
     
