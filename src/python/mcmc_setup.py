@@ -52,9 +52,9 @@ def get_original_params(model):
                         'P_{NaK}', 'G_{to}', 'G_{bNa}', 'G_f']
     return original_gs, g_parameters
     
-def nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed): # synthetic data
+def synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed): # synthetic data
     # keeping it outside of Chaste build folder, in case that gets wiped in a clean build, or something
-    output_dir = os.path.expanduser('~/RossJ_output/model_{}/protocol_{}/c_seed_{}/')
+    output_dir = os.path.expanduser('~/RossJ_output/model_{}/protocol_{}/c_seed_{}/'.format(model,protocol,c_seed))
     chain_dir = output_dir + 'chain/'
     figs_dir = output_dir + 'figures/'
     for d in [chain_dir,figs_dir]:

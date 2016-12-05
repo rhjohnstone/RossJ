@@ -4,11 +4,21 @@ import numpy as np
 import numpy.random as npr
 import matplotlib.pyplot as plt
 import time
+import sys
 
-model = 4
+model = sys.argv[1]
 protocol = 1
 c_seed = 1
 noise_sd = 0.25
+
+original_gs, g_parameters = ms.get_original_params(model) # list, list
+
+chain_file, figs_dir = ms.synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed)
+with open(chain_file,"w") as outfile:
+    outfile.write("# Synthetic nonhierarchical MCMC\n")
+    outfile.write("# Model {}, protocol {}, c_seed {}\n".format(model,protocol,c_seed))
+    outfile.write("# noise_sd {}\n".format(noise_sd))
+
 
 python_seed = c_seed+1
 npr.seed(python_seed)
@@ -18,9 +28,9 @@ def normal_loglikelihood_uniform_priors(test_trace,expt_trace,sigma):
     sum_of_square_diffs = np.sum((test_trace-expt_trace)**2)
     return -num_pts*np.log(sigma)-sum_of_square_diffs/(2.*sigma**2)
     
-original_gs, g_parameters = ms.get_original_params(model) # list, list
 
-chain_file, figs_dir = ms.nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed)
+
+chain_file, figs_dir = ms.synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed)
 
 start_time = 0.
 end_time = 400.
@@ -37,14 +47,19 @@ theta_cur = np.copy(original_gs+[sigma_cur])
 mean_estimate = np.copy(theta_cur)
 test_trace = cell.SolveForVoltageTraceWithParams(original_gs)
 log_target_cur = normal_loglikelihood_uniform_priors(test_trace,expt_trace,sigma_cur)
+
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid()
-ax.plot(expt_times,expt_trace,color='red',label='Expt')
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('Membrane voltage (mV)')
+ax.plot(expt_times,expt_trace,color='red',label='Synthetic expt')
 ax.plot(expt_times,test_trace,color='blue',label='Initial')
 ax.legend()
+fig.tight_layout()
+fig.savefig(figs_dir+'initial_and_expt_traces.png')
+plt.close()
 print "log_target_cur:", log_target_cur
-#plt.show(block=True)
 
 num_params = len(theta_cur)
 
@@ -60,7 +75,7 @@ acceptance = 0.
 acceptance_target = 0.25
 when_to_adapt = 100*num_params
 
-num_total_iterations = 100000
+num_total_iterations = 200000
 thinning = 5
 assert(num_total_iterations%thinning==0)
 
@@ -72,8 +87,11 @@ when_to_update = num_total_iterations / how_many_updates
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid()
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('Membrane voltage (mV)')
+ax.set_title('All (post-burn, thinned) MCMC sample traces')
 
-burn = num_saved_iterations/2
+burn = num_saved_iterations/4
 mcmc = np.zeros((num_saved_iterations+1,num_params+1))
 mcmc[0,:] = first_iteration
 start = time.time()
@@ -109,19 +127,36 @@ for it in xrange(1,num_total_iterations+1):
         print "loga:", loga
         print "Estimated time remaining: {} s = {} min".format(round(estimated_time_left,1),round(estimated_time_left/60.,2))
 time_taken = time.time()-start
-print "Time taken: {} s".format(round(time_taken,2))    
+print "Time taken: {} s".format(round(time_taken,2))
+
+ax.plot(expt_times,expt_trace,color='red',label='Synthetic expt')
+ax.legend()
+fig.tight_layout()
+fig.savefig(figs_dir+'mcmc_sample_traces.png')
+plt.close()
     
-print mcmc[:,-1]
+with open(chain_file,"a") as outfile:
+    np.savetxt(outfile,mcmc)
     
-ax.plot(expt_times,expt_trace,color='red')
+
 
 for i in xrange(num_params):
+    if (i<num_params-1):
+        original_value = original_gs[i]
+        label = g_parameters[i]
+    elif (i==num_params-1):
+        original_value = noise_sd
+        label = r"\sigma"
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.grid()
-    ax.hist(mcmc[burn:,i],normed=True,bins=40)
-    
-plt.show(block=True)
+    ax.hist(mcmc[burn:,i],normed=True,bins=40,color='blue',edgecolor='blue')
+    ax.axvline(original_value,color='red',lw=2)
+    ax.set_ylabel('Probability density')
+    ax.set_xlabel('$'+label+'$')
+    fig.tight_layout()
+    fig.savefig(figs_dir+label.translate(None,r'\\{}')+'_marginal.png') # need double slashes to get rid of the sigma slash for some reason
+    plt.close()
 
 
 
