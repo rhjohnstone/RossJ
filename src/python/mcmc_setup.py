@@ -52,15 +52,26 @@ def get_original_params(model):
                         'P_{NaK}', 'G_{to}', 'G_{bNa}', 'G_f']
     return original_gs, g_parameters
     
-def synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed): # synthetic data
+def synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,python_seed): # synthetic data
     # keeping it outside of Chaste build folder, in case that gets wiped in a clean build, or something
-    output_dir = os.path.expanduser('~/RossJ_output/model_{}/protocol_{}/c_seed_{}/'.format(model,protocol,c_seed))
+    output_dir = os.path.expanduser('~/RossJ_output/synthetic/nonhierarchical/model_{}/protocol_{}/python_seed_{}/'.format(model,protocol,python_seed))
     chain_dir = output_dir + 'chain/'
     figs_dir = output_dir + 'figures/'
     for d in [chain_dir,figs_dir]:
         if not os.path.exists(d):
             os.makedirs(d)
-    chain_file = chain_dir + 'model_{}_protocol_{}_c_seed_{}_mcmc.txt'.format(model,protocol,c_seed)
+    chain_file = chain_dir + 'model_{}_protocol_{}_python_seed_{}_synthetic_nonhierarchical_mcmc.txt'.format(model,protocol,python_seed)
+    return chain_file, figs_dir
+    
+def synthetic_hierarchical_chain_file_and_figs_dir(model,protocol,python_seed): # synthetic data
+    # keeping it outside of Chaste build folder, in case that gets wiped in a clean build, or something
+    output_dir = os.path.expanduser('~/RossJ_output/synthetic/hierarchical/model_{}/protocol_{}/python_seed_{}/'.format(model,protocol,python_seed))
+    chain_dir = output_dir + 'chain/'
+    figs_dir = output_dir + 'figures/'
+    for d in [chain_dir,figs_dir]:
+        if not os.path.exists(d):
+            os.makedirs(d)
+    chain_file = chain_dir + 'model_{}_protocol_{}_python_seed_{}_synthetic_hierarchical_mcmc.txt'.format(model,protocol,python_seed)
     return chain_file, figs_dir
     
 

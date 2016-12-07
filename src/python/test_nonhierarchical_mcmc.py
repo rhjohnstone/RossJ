@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 import sys
 
-model = sys.argv[1]
+model = int(sys.argv[1])
 protocol = 1
 c_seed = 1
 noise_sd = 0.25
@@ -27,8 +27,6 @@ def normal_loglikelihood_uniform_priors(test_trace,expt_trace,sigma):
     num_pts = len(test_trace)
     sum_of_square_diffs = np.sum((test_trace-expt_trace)**2)
     return -num_pts*np.log(sigma)-sum_of_square_diffs/(2.*sigma**2)
-    
-
 
 chain_file, figs_dir = ms.synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,c_seed)
 
