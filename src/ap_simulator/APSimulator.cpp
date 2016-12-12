@@ -49,21 +49,17 @@ void APSimulator::RedirectStdErr()
 }
 */
 
-void APSimulator::DefineProtocol(unsigned protocol_number)
+void APSimulator::DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time;)
 {
-    double stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time;
+    //stimulus_magnitude = -25.5;
+    //stimulus_duration = 2;
+    //stimulus_period = 1000;
+    //stimulus_start_time = 20;
     
-    if (protocol_number == 1u)
-    {
-        stimulus_magnitude = -25.5;
-        stimulus_duration = 2;
-        stimulus_period = 1000;
-        stimulus_start_time = 20;
-        
-        mSolveStart = 0;
-        mSolveEnd = 400;
-        mSolveTimestep = 0.2;
-    }
+    mSolveStart = 0;
+    mSolveEnd = 400;
+    mSolveTimestep = 0.2;
+
     
     mpStimulus.reset(new RegularStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time));
 }

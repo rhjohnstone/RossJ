@@ -50,7 +50,7 @@ protocol = 1
 python_seed = 1
 noise_sd = 0.25
 
-num_expts = 5
+num_expts = 3
 
 uniform_noise_prior = [0,50]
 
@@ -72,12 +72,10 @@ expt_params[where_params_negative] = 0.
 
 print expt_params
 
-chain_file, figs_dir = ms.synthetic_hierarchical_chain_file_and_figs_dir(model,protocol,python_seed)
-with open(chain_file,"w") as outfile:
-    outfile.write("# Synthetic hierarchical MCMC\n")
-    outfile.write("# Model {}, protocol {}, python_seed {}\n".format(model,protocol,python_seed))
-    outfile.write("# noise_sd {}\n".format(noise_sd))
+#sys.exit()
 
+
+chain_file, figs_dir = ms.synthetic_hierarchical_chain_file_and_figs_dir(model,protocol,python_seed)
 
 npr.seed(python_seed)
 
@@ -106,9 +104,14 @@ for i in xrange(num_expts):
     temp_trace = cell.SolveForVoltageTraceWithParams(expt_params[i,:])
     temp_trace += noise_sd*npr.randn(len(temp_trace))
     expt_traces[i,:] = temp_trace
-    ax.plot(expt_times,temp_trace)
+    ax.plot(expt_times,temp_trace,label='Expt {}'.format(i+1))
 print expt_traces
+ax.legend()
+fig.tight_layout()
+fig.savefig(figs_dir+'expt_traces.png')
 plt.close()
+
+#sys.exit()
 
 initial_theta_curs = np.copy(expt_params)
 
@@ -146,7 +149,7 @@ print temp_test_traces_cur
 
 proposal_scale = 0.001
 
-covariances = [proposal_scale*np.eye(num_g_params)*original_gs for i in xrange(num_expts)]
+covariances = [proposal_scale*np.diag(expt_params[i,:]) for i in xrange(num_expts)]
 
 print covariances
 
@@ -159,6 +162,12 @@ sigma_acceptance = 0.
 
 acceptance_target = 0.25
 when_to_adapt = 20*num_g_params
+
+
+with open(chain_file,"w") as outfile:
+    outfile.write("# Synthetic hierarchical MCMC\n")
+    outfile.write("# Model {}, protocol {}, python_seed {}\n".format(model,protocol,python_seed))
+    outfile.write("# noise_sd {}\n".format(noise_sd))
 
 
 

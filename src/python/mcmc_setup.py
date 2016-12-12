@@ -52,6 +52,17 @@ def get_original_params(model):
                         'P_{NaK}', 'G_{to}', 'G_{bNa}', 'G_f']
     return original_gs, g_parameters
     
+def get_protocol_details(protocol): # pre-defined protocols
+    if (protocol==1):
+        solve_start = 0.
+        solve_end = 400.
+        solve_timestep = 0.2
+        stimulus_magnitude = -25.5
+        stimulus_duration = 2
+        stimulus_period = 1000
+        stimulus_start_time = 20
+    return solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time
+    
 def synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,python_seed): # synthetic data
     # keeping it outside of Chaste build folder, in case that gets wiped in a clean build, or something
     output_dir = os.path.expanduser('~/RossJ_output/synthetic/nonhierarchical/model_{}/protocol_{}/python_seed_{}/'.format(model,protocol,python_seed))
