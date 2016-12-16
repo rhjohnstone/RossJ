@@ -49,6 +49,10 @@ project_name = os.path.basename(os.path.dirname(os.path.dirname(os.getcwd())))
 chaste_libs_used = ['heart']
 #chaste_libs_used = ['cell_based', 'heart']
 
+# Change some flags just for this project
+env = SConsTools.CloneEnv(env)
+env['PYCML_EXTRA_ARGS'] = ['--cvode-data-clamp', '--expose-annotated-variables']
+
 # Do the build magic
 result = SConsTools.DoProjectSConscript(project_name, chaste_libs_used, globals())
 Return("result")
