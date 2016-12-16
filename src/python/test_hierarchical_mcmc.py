@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as st
 import time
 import sys
+import argparse
 
 def new_eta(old_eta,samples): # for sampling from conjugate prior-ed N-IG
     assert(len(old_eta)==4)
@@ -44,13 +45,19 @@ def update_covariance_matrix(t,thetaCur,meanum_exptsstimate,cov_estimate,loga,ac
     new_meanum_exptsstimate = (1-gamma_s) * meanum_exptsstimate + gamma_s * thetaCur
     new_loga = loga + gamma_s*(accepted-0.25)
     return new_cov_estimate, new_meanum_exptsstimate, new_loga
+    
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--iterations", type=int, help="number of MCMC iterations",default=1000000)
+parser.add_argument("-Ne", "--num-expts", type=int, help="number of synthetic dog AP traces",default=2)
+parser.add_argument("-p", "--protocol", type=int, help="protocol number",default=1)
+args = parser.parse_args()
 
-model = int(sys.argv[1])
-protocol = 1
+model = 6 # just Davies dog for now
+protocol = args.protocol
 python_seed = 1
 noise_sd = 0.25
 
-num_expts = 3
+num_expts = args.num_expts
 
 uniform_noise_prior = [0,50]
 
@@ -75,7 +82,7 @@ print expt_params
 #sys.exit()
 
 
-chain_file, figs_dir = ms.synthetic_hierarchical_chain_file_and_figs_dir(model,protocol,python_seed)
+chain_file, figs_dir, info_file = ms.synthetic_hierarchical_chain_file_and_figs_dir(model,protocol,num_expts,python_seed)
 
 npr.seed(python_seed)
 
@@ -84,17 +91,16 @@ def normal_loglikelihood_uniform_priors(test_trace,expt_trace,sigma):
     sum_of_square_diffs = np.sum((test_trace-expt_trace)**2)
     return -num_pts*np.log(sigma)-sum_of_square_diffs/(2.*sigma**2)
 
+solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
 
 # need to make sure these are always same as in C++ protocol
 # might have to change it to have protocols hard-coded into Python instead of C++
-start_time = 0.
-end_time = 400.
-timestep = 0.2
-expt_times = np.arange(start_time,end_time+timestep,timestep)
+
+expt_times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 num_pts = len(expt_times)
     
 cell = ap.APSimulator()
-cell.DefineProtocol(protocol)
+cell.DefineProtocol(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
 cell.DefineModel(model)
 
 expt_traces = np.zeros((num_expts,num_pts))
@@ -171,7 +177,7 @@ with open(chain_file,"w") as outfile:
 
 
 
-num_total_iterations = 10000
+num_total_iterations = args.iterations
 thinning = 5
 assert(num_total_iterations%thinning==0)
 
@@ -226,9 +232,6 @@ for it in xrange(1,num_total_iterations+1):
     target_star = log_pi_sigma(expt_traces,temp_test_traces_cur,noise_sigma_star,num_expts,num_pts,uniform_noise_prior)
     target_cur = log_pi_sigma(expt_traces,temp_test_traces_cur,noise_sigma_cur,num_expts,num_pts,uniform_noise_prior)
     
-    
-    
-    
     u = npr.rand()
     if (np.log(u) < target_star - target_cur):
         noise_sigma_cur = noise_sigma_star
@@ -256,10 +259,16 @@ print "Time taken: {} s".format(round(time_taken,2))
 print mcmc
 
 print "\nShould be saved to", chain_file, "\n"
-
-    
 with open(chain_file,"a") as outfile:
     np.savetxt(outfile,mcmc)
+    
+with open(info_file,"w") as outfile:
+    outfile.write("Model {}, protocol {}\n".format(model,protocol))
+    outfile.write("python_seed {}\n".format(python_seed))
+    outfile.write("noise_sd {}\n".format(noise_sd))
+    outfile.write("num_total_iterations {}\n".format(num_total_iterations))
+    outfile.write("num_saved_iterations {}\n".format(num_saved_iterations))
+    outfile.write("time_taken = {} s = {} mins = {} hrs\n".format(round(time_taken),round(time_taken/60.,1),round(time_taken/3600.,2)))
     
 
 for expt in xrange(num_expts):
@@ -288,3 +297,42 @@ ax.set_xlabel(r'$\sigma$')
 fig.tight_layout()
 fig.savefig(figs_dir+'sigma_marginal.png') # need double slashes to get rid of the sigma slash for some reason
 plt.close()
+
+
+for i in xrange(num_g_params):
+    original_value = original_gs[i]
+    label = g_parameters[i]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.grid()
+    ax.hist(mcmc[burn:,i],normed=True,bins=40,color='blue',edgecolor='blue')
+    ax.axvline(original_value,color='red',lw=2)
+    ax.set_ylabel('Probability density')
+    ax.set_xlabel(r'$\hat{'+label+r'}$')
+    fig.tight_layout()
+    fig.savefig(figs_dir+"top_"+label.translate(None,r'\\{}')+'_marginal.png') # need double slashes to get rid of the sigma slash for some reason
+    plt.close()
+
+
+for i in xrange(num_g_params):
+    original_value = expt_params_cov_matrix[i,i]
+    label = g_parameters[i]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.grid()
+    ax.hist(mcmc[burn:,num_g_params+i],normed=True,bins=40,color='blue',edgecolor='blue')
+    ax.axvline(original_value,color='red',lw=2)
+    ax.set_ylabel('Probability density')
+    ax.set_xlabel(r'$\sigma_{'+label+r'}^2$')
+    fig.tight_layout()
+    fig.savefig(figs_dir+"top_sigma_squared_"+label.translate(None,r'\\{}')+'_marginal.png') # need double slashes to get rid of the sigma slash for some reason
+    plt.close()
+
+
+
+
+
+
+
+
+

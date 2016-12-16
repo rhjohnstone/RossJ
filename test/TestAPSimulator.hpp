@@ -65,12 +65,14 @@ class TestAPSimulator : public CxxTest::TestSuite
 public:
     void TestAPSimulatorClass() throw(Exception)
     {
+    
+        double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
+    
         unsigned model_number = 1u;
-        unsigned protocol_number = 1u;
     
         APSimulator simulator;
         
-        simulator.DefineProtocol(protocol_number);
+        simulator.DefineProtocol( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
         simulator.DefineModel(model_number);
         
         std::vector<std::string> parameter_metanames = simulator.GetParameterMetanames();
@@ -83,11 +85,12 @@ public:
     void xTestAPSolve() throw(Exception)
     {
         unsigned model_number = 1u;
-        unsigned protocol_number = 1u;
+
+        double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
     
         APSimulator simulator;
         
-        simulator.DefineProtocol(protocol_number);
+        simulator.DefineProtocol( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
         simulator.DefineModel(model_number);
 
         

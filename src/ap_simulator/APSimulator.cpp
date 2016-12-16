@@ -49,7 +49,7 @@ void APSimulator::RedirectStdErr()
 }
 */
 
-void APSimulator::DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time;)
+void APSimulator::DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time)
 {
     //stimulus_magnitude = -25.5;
     //stimulus_duration = 2;

@@ -23,7 +23,7 @@ public:
     APSimulator();
     ~APSimulator();
     //void RedirectStdErr();
-    void DefineProtocol(unsigned protocol_number);
+    void DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time);
     void DefineModel(unsigned model_number);
     std::vector<std::string> GetParameterMetanames();
     std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams);
