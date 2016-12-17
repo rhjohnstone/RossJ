@@ -19,7 +19,8 @@
 #include "ten_tusscher_model_2004_epiCvode.hpp"
 //#include "ten_tusscher_model_2004_epiCvodeOpt.hpp" // trying to catch blip "davies_isap_2012CvodeDataClampOpt.hpp"
 #include "ohara_rudy_2011_endoCvode.hpp"
-#include "davies_isap_2012CvodeDataClamp.hpp"
+//#include "davies_isap_2012CvodeDataClamp.hpp"
+#include "davies_isap_2012Cvode.hpp"
 #include "paci_hyttinen_aaltosetala_severi_ventricularVersionCvode.hpp"
 
 APSimulator::APSimulator()
@@ -49,19 +50,16 @@ void APSimulator::RedirectStdErr()
 }
 */
 
-void APSimulator::DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time)
+void APSimulator::DefineStimulus(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time)
 {
-    //stimulus_magnitude = -25.5;
-    //stimulus_duration = 2;
-    //stimulus_period = 1000;
-    //stimulus_start_time = 20;
-    
-    mSolveStart = 0;
-    mSolveEnd = 400;
-    mSolveTimestep = 0.2;
-
-    
     mpStimulus.reset(new RegularStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time));
+}
+
+void APSimulator::DefineSolveTimes(double solve_start, double solve_end, double solve_timestep)
+{
+    mSolveStart = solve_start;
+    mSolveEnd = solve_end;
+    mSolveTimestep = solve_timestep;
 }
 
 void APSimulator::DefineModel(unsigned model_number)
@@ -125,9 +123,10 @@ void APSimulator::DefineModel(unsigned model_number)
         mParameterMetanames.push_back("membrane_calcium_pump_current_conductance");                       // 0.0005
         mParameterMetanames.push_back("membrane_persistent_sodium_current_conductance");                  // 0.0075
     }
-    else if ( model_number == 6u ) // Davies 2012
+    else if ( model_number == 6u ) // Davies 2012 (with data clamp)
     {
-        mpModel.reset(new Celldavies_isap_2012FromCellMLCvodeDataClamp(p_solver, mpStimulus));
+        //mpModel.reset(new Celldavies_isap_2012FromCellMLCvodeDataClamp(p_solver, mpStimulus));
+        mpModel.reset(new Celldavies_isap_2012FromCellMLCvode(p_solver, mpStimulus));
         mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");                        // 8.25
         mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");                     // 0.000243
         mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");         // 0.5
@@ -186,7 +185,7 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
             }
         }
 
-        OdeSolution sol1 = mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep); // Do I need a good way to kill everything if this fails to solve?
+        OdeSolution sol1 = mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
         voltage_trace = sol1.GetAnyVariable("membrane_voltage");
     }
     catch (Exception &e)

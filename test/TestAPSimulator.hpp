@@ -67,12 +67,15 @@ public:
     {
     
         double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
+        
+        double solve_start = 0, solve_end = 400, solve_timestep = 0.2;
     
         unsigned model_number = 1u;
     
         APSimulator simulator;
         
-        simulator.DefineProtocol( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
         simulator.DefineModel(model_number);
         
         std::vector<std::string> parameter_metanames = simulator.GetParameterMetanames();
@@ -87,10 +90,13 @@ public:
         unsigned model_number = 1u;
 
         double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
+        
+        double solve_start = 0, solve_end = 400, solve_timestep = 0.2;
     
         APSimulator simulator;
         
-        simulator.DefineProtocol( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
         simulator.DefineModel(model_number);
 
         

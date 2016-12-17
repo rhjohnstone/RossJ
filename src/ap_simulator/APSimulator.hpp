@@ -23,7 +23,8 @@ public:
     APSimulator();
     ~APSimulator();
     //void RedirectStdErr();
-    void DefineProtocol(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time);
+    void DefineStimulus(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time);
+    void DefineSolveTimes(double solve_start, double solve_end, double solve_timestep);
     void DefineModel(unsigned model_number);
     std::vector<std::string> GetParameterMetanames();
     std::vector<double> SolveForVoltageTraceWithParams(const std::vector<double>& rParams);

@@ -66,7 +66,8 @@ BOOST_PYTHON_MODULE(_chaste_project_RossJ_ap_simulator)
     //;
 
     class_<APSimulator>("APSimulator")
-        .def("DefineProtocol", &APSimulator::DefineProtocol)
+        .def("DefineStimulus", &APSimulator::DefineStimulus)
+        .def("DefineSolveTimes", &APSimulator::DefineSolveTimes)
         .def("DefineModel", &APSimulator::DefineModel)
         .def("SolveForVoltageTraceWithParams", &APSimulator::SolveForVoltageTraceWithParams)
         .def("SetTolerances", &APSimulator::SetTolerances)

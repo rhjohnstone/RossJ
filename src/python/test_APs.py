@@ -2,7 +2,7 @@ import ap_simulator
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-import mcmc_setup
+import mcmc_setup as ms
 
 def example_likelihood_function(trace):
     return np.sum(trace**2)
@@ -15,26 +15,30 @@ def example_likelihood_function(trace):
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
 
-for model_number in xrange(1,8):
+for model_number in xrange(6,7):
     #model_number = 4
-    protocol_number = 1
+    protocol = 1
+    
+    solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
     
     noise_sd = 0.25
     c_seed = 1
 
-    original_gs, g_parameters = mcmc_setup.get_original_params(model_number)
+    original_gs, g_parameters = ms.get_original_params(model_number)
 
-    #times = np.arange(solve_start,solve_end+sampling_timestep,sampling_timestep)
+    times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 
     ap = ap_simulator.APSimulator()
 
-    ap.DefineProtocol(protocol_number)
-    ap.DefineModel(model_number)
-    expt_trace = ap.GenerateSyntheticExptTrace(original_gs,noise_sd,c_seed)
+    for stimulus_magnitude in [0,-25,-100]:
+        ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
+        ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
+        ap.DefineModel(model_number)
+        true_trace = ap.SolveForVoltageTraceWithParams(original_gs)
 
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    #ax.plot(times,trace)
-    ax.plot(expt_trace)
-    plt.show(block=True)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        #ax.plot(times,trace)
+        ax.plot(times,true_trace)
+        plt.show(block=True)

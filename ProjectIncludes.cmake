@@ -31,8 +31,8 @@
 # 
 
 ######### Collect the include directories for the project. ###################### 
-set(PYCHASTE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/)
-list (APPEND PYCHASTE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/tutorial)
-list (APPEND PYCHASTE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/rossj) # manually added by RJ
-list (APPEND PYCHASTE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/ap_simulator) # manually added by RJ
-list (APPEND PYCHASTE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/dynamic)
+set(ROSSJ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+list (APPEND ROSSJ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/tutorial)
+list (APPEND ROSSJ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/rossj) # manually added by RJ
+list (APPEND ROSSJ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/ap_simulator) # manually added by RJ
+list (APPEND ROSSJ_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/dynamic)
