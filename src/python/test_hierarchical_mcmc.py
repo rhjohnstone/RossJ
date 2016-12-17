@@ -100,7 +100,8 @@ expt_times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 num_pts = len(expt_times)
     
 cell = ap.APSimulator()
-cell.DefineProtocol(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
+cell.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
+cell.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 cell.DefineModel(model)
 
 expt_traces = np.zeros((num_expts,num_pts))
