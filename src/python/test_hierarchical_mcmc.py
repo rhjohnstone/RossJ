@@ -2,6 +2,8 @@ import ap_simulator as ap
 import mcmc_setup as ms
 import numpy as np
 import numpy.random as npr
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import scipy.stats as st
 import time
