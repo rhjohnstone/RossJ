@@ -19,13 +19,21 @@
 #include "ten_tusscher_model_2004_epiCvode.hpp"
 //#include "ten_tusscher_model_2004_epiCvodeOpt.hpp" // trying to catch blip "davies_isap_2012CvodeDataClampOpt.hpp"
 #include "ohara_rudy_2011_endoCvode.hpp"
-//#include "davies_isap_2012CvodeDataClamp.hpp"
-#include "davies_isap_2012Cvode.hpp"
+#include "davies_isap_2012CvodeDataClamp.hpp"
+//#include "davies_isap_2012Cvode.hpp"
 #include "paci_hyttinen_aaltosetala_severi_ventricularVersionCvode.hpp"
 
 APSimulator::APSimulator()
-    : mNumberOfFailedSolves(0),
-      mHowManySolves(1)
+    : mModelNumber(1),
+      mNumberOfFailedSolves(0),
+      mHowManySolves(1),
+      mSolveStart(0),
+      mSolveEnd(500),
+      mSolveTimestep(0.2),
+      mNumTimePts(2501),
+      mUseDataClamp(false),
+      mDataClampOn(0),
+      mDataClampOff(1)
 {
     //RedirectStdErr();
     std::cerr << "*** INSIDE CONSTRUCTOR (nothing should happen here) ***" << std::endl << std::flush;
@@ -60,6 +68,7 @@ void APSimulator::DefineSolveTimes(double solve_start, double solve_end, double 
     mSolveStart = solve_start;
     mSolveEnd = solve_end;
     mSolveTimestep = solve_timestep;
+    mNumTimePts = (solve_end - solve_start)/solve_timestep + 1;
 }
 
 void APSimulator::DefineModel(unsigned model_number)
@@ -125,8 +134,8 @@ void APSimulator::DefineModel(unsigned model_number)
     }
     else if ( model_number == 6u ) // Davies 2012 (with data clamp)
     {
-        //mpModel.reset(new Celldavies_isap_2012FromCellMLCvodeDataClamp(p_solver, mpStimulus));
-        mpModel.reset(new Celldavies_isap_2012FromCellMLCvode(p_solver, mpStimulus));
+        mpModel.reset(new Celldavies_isap_2012FromCellMLCvodeDataClamp(p_solver, mpStimulus));
+        //mpModel.reset(new Celldavies_isap_2012FromCellMLCvode(p_solver, mpStimulus));
         mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");                        // 8.25
         mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");                     // 0.000243
         mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");         // 0.5
@@ -166,11 +175,10 @@ std::vector<std::string> APSimulator::GetParameterMetanames()
     return mParameterMetanames;
 }
 
-std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vector<double>& rParams)
+std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const std::vector<double>& rParams)
 {
-    std::vector<double> voltage_trace;
-
     mpModel->SetStateVariables(mpModel->GetInitialConditions());
+    std::vector<double> voltage_trace;
     for (unsigned j=0; j<rParams.size(); j++)
     {
         mpModel->SetParameter(mParameterMetanames[j], rParams[j]);
@@ -184,7 +192,6 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
                 mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
             }
         }
-
         OdeSolution sol1 = mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
         voltage_trace = sol1.GetAnyVariable("membrane_voltage");
     }
@@ -192,11 +199,60 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vecto
     {
         std::cerr << "WARNING: CVODE failed to solve with these parameters" << std::endl << std::flush;
         std::cerr << "error was " << e.GetShortMessage() << std::endl << std::flush;
-        voltage_trace = std::vector<double>(mExptTrace.size(), 0.0);
+        voltage_trace = std::vector<double>(mNumTimePts, 0.0);
         mNumberOfFailedSolves++;
     }
     return voltage_trace;
 }
+
+std::vector<double> APSimulator::SolveForVoltageTraceWithParamsWithDataClamp(const std::vector<double>& rParams)
+{
+    mpModel->SetStateVariables(mpModel->GetInitialConditions());
+    std::vector<double> voltage_trace;
+    
+    for (unsigned j=0; j<rParams.size(); j++)
+    {
+        mpModel->SetParameter(mParameterMetanames[j], rParams[j]);
+    }
+    mpModel->SetStateVariable("membrane_voltage",mExptTrace[0]);
+
+    boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOffDataClamp();
+
+    //mpModel->ResetSolver();
+    OdeSolution sol1 = mpModel->Compute(mSolveStart, mDataClampOn, mSolveTimestep);
+    voltage_trace = sol1.GetAnyVariable("membrane_voltage");
+    mpModel->ResetSolver();
+    boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOnDataClamp(200);
+    OdeSolution sol2 = mpModel->Compute(mDataClampOn, mDataClampOff, mSolveTimestep);
+    mpModel->ResetSolver();
+    boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOffDataClamp();
+    OdeSolution sol3 = mpModel->Compute(mDataClampOff, mSolveEnd, mSolveTimestep);
+
+
+    std::vector<double> voltage_trace_part_2 = sol2.GetAnyVariable("membrane_voltage");
+    std::vector<double> voltage_trace_part_3 = sol3.GetAnyVariable("membrane_voltage");
+
+    voltage_trace.erase(voltage_trace.end()-1);
+    voltage_trace.insert( voltage_trace.end(), voltage_trace_part_2.begin(), voltage_trace_part_2.end() );
+    voltage_trace.erase(voltage_trace.end()-1);
+    voltage_trace.insert( voltage_trace.end(), voltage_trace_part_3.begin(), voltage_trace_part_3.end() );
+    return voltage_trace;
+}
+
+std::vector<double> APSimulator::SolveForVoltageTraceWithParams(const std::vector<double>& rParams)
+{
+    std::vector<double> voltage_trace;
+    if (mUseDataClamp == false)
+    {
+        voltage_trace = SolveForVoltageTraceWithParamsNoDataClamp(rParams);
+    }
+    else
+    {
+        voltage_trace = SolveForVoltageTraceWithParamsWithDataClamp(rParams);
+    }
+    return voltage_trace;
+}
+        
 
 void APSimulator::SetTolerances(double rel_tol, double abs_tol)
 {
@@ -229,4 +285,17 @@ std::vector<double> APSimulator::GenerateSyntheticExptTrace(const std::vector<do
     }
     mExptTrace = expt_trace;
     return expt_trace;
+}
+
+void APSimulator::UseDataClamp(double data_clamp_on, double data_clamp_off)
+{
+    mUseDataClamp = true;
+    mDataClampOn = data_clamp_on;
+    mDataClampOff = data_clamp_off;
+}
+
+void APSimulator::SetExperimentalTraceAndTimesForDataClamp(const std::vector<double>& expt_times, const std::vector<double>& expt_trace)
+{
+    boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->SetExperimentalData(expt_times,expt_trace);
+    mExptTrace = expt_trace;
 }

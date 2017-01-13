@@ -73,6 +73,8 @@ BOOST_PYTHON_MODULE(_chaste_project_RossJ_ap_simulator)
         .def("SetTolerances", &APSimulator::SetTolerances)
         .def("ExampleLogLikelihoodFunction", &APSimulator::ExampleLogLikelihoodFunction)
         .def("GenerateSyntheticExptTrace", &APSimulator::GenerateSyntheticExptTrace)
+        .def("UseDataClamp", &APSimulator::UseDataClamp)
+        .def("SetExperimentalTraceAndTimesForDataClamp", &APSimulator::SetExperimentalTraceAndTimesForDataClamp)
     ;
 
     PythonIterableToStl()

@@ -36,7 +36,6 @@ for model_number in xrange(6,7):
         ap.DefineModel(model_number)
         true_trace = ap.SolveForVoltageTraceWithParams(original_gs)
 
-
         fig = plt.figure()
         ax = fig.add_subplot(111)
         #ax.plot(times,trace)
