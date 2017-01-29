@@ -179,6 +179,7 @@ std::vector<std::string> APSimulator::GetParameterMetanames()
 
 std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const std::vector<double>& rParams)
 {
+    std::cerr << "About to try and solve" << std::endl << std::flush;
     mpModel->SetStateVariables(mpModel->GetInitialConditions());
     std::vector<double> voltage_trace;
     for (unsigned j=0; j<rParams.size(); j++)
