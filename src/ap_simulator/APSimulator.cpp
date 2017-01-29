@@ -65,10 +65,12 @@ void APSimulator::DefineStimulus(double stimulus_magnitude, double stimulus_dura
 
 void APSimulator::DefineSolveTimes(double solve_start, double solve_end, double solve_timestep)
 {
+    std::cerr << "About to define solve times" << std::endl << std::flush;
     mSolveStart = solve_start;
     mSolveEnd = solve_end;
     mSolveTimestep = solve_timestep;
     mNumTimePts = (solve_end - solve_start)/solve_timestep + 1;
+    std::cerr << "Solve times defined" << std::endl << std::flush;
 }
 
 void APSimulator::DefineModel(unsigned model_number)
