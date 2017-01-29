@@ -56,6 +56,8 @@ times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 
 ap = ap_simulator.APSimulator()
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
+ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
+ap.DefineModel(model_number)
 
 opts = cma.CMAOptions()
 opts['seed'] = 1

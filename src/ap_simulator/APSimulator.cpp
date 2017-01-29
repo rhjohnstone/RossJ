@@ -179,14 +179,14 @@ std::vector<std::string> APSimulator::GetParameterMetanames()
 
 std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const std::vector<double>& rParams)
 {
-    std::cerr << "About to try and solve" << std::endl << std::flush;
+    //std::cerr << "About to try and solve" << std::endl << std::flush;
     mpModel->SetStateVariables(mpModel->GetInitialConditions());
     std::vector<double> voltage_trace;
     for (unsigned j=0; j<rParams.size(); j++)
     {
         mpModel->SetParameter(mParameterMetanames[j], rParams[j]);
     }
-    std::cerr << "Just set(ted) parameters" << std::endl << std::flush;
+    //std::cerr << "Just set(ted) parameters" << std::endl << std::flush;
     try
     {
         if (mHowManySolves > 1)
@@ -196,9 +196,9 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const
                 mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
             }
         }
-        std::cerr << "About to actually try and solve" << std::endl << std::flush;
+        //std::cerr << "About to actually try and solve" << std::endl << std::flush;
         OdeSolution sol1 = mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
-        std::cerr << "Just solved" << std::endl << std::flush;
+        //std::cerr << "Just solved" << std::endl << std::flush;
         voltage_trace = sol1.GetAnyVariable("membrane_voltage");
     }
     catch (Exception &e)
