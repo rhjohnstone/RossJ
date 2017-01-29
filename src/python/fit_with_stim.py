@@ -66,6 +66,8 @@ x0 = np.copy(original_gs)
 original_obj_fun = sum_of_square_diffs(x0,expt_trace,upper_bounds,ap)
 print "original_obj_fun =", original_obj_fun
 
+start = time.time()
+
 sigma0 = 0.00001
 es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
 while not es.stop():
@@ -73,9 +75,11 @@ while not es.stop():
     es.tell(X, [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X])
     es.disp()
 res = es.result()
+time_taken = time.time()-start
 print "res[0] =", res[0]
 best_gs = res[0]
 
+print "\nTime taken: {} s\n".format(round(time_taken,1))
 
 best_fit_trace = ap.SolveForVoltageTraceWithParams(best_gs)
 
