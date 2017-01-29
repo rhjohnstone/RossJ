@@ -32,6 +32,9 @@ dog_AP = np.loadtxt(temp_dog_AP_file,delimiter=',')
 expt_times = 1000*dog_AP[:,0]
 expt_trace = 1000*dog_AP[:,1]
 
+print expt_times
+print expt_trace
+
 
 # 1. Hodgkin Huxley
 # 2. Beeler Reuter
