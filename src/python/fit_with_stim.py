@@ -7,10 +7,7 @@ import cma
 import multiprocessing as mp
 import itertools as it
 
-num_cores = mp.cpu_count()-1
-if (num_cores < 1):
-    num_cores = 1
-pool = mp.Pool(num_cores)
+
 
 def prior_upper_bounds(original_gs):
     return 100*np.array(original_gs)
@@ -84,13 +81,18 @@ print "original_obj_fun =", original_obj_fun
 
 start = time.time()
 
+num_cores = mp.cpu_count()-1
+if (num_cores < 1):
+    num_cores = 1
+pool = mp.Pool(num_cores)
+
 sigma0 = 0.00001
 es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
 while not es.stop():
     X = es.ask()
-    temp_vals = pool.map_async(sum_of_square_diffs,X).get(9999)
+    f_vals = pool.map_async(sum_of_square_diffs,X).get(9999)
     #temp_vals = [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X]
-    es.tell(X, temp_vals)
+    es.tell(X, f_vals)
     es.disp()
 pool.close()
 res = es.result()
