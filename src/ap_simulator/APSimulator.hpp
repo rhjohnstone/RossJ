@@ -39,6 +39,7 @@ public:
     std::vector<double> GenerateSyntheticExptTrace(const std::vector<double>& rParams, double noise_sd, double c_seed);
     void UseDataClamp(double data_clamp_on, double data_clamp_off);
     void SetExperimentalTraceAndTimesForDataClamp(const std::vector<double>& expt_times, const std::vector<double>& expt_trace);
+    void SetExtracellularPotassiumConc( double extra_K_conc );
 };
 
 

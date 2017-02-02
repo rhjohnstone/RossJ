@@ -49,6 +49,8 @@ print len(expt_times)
 noise_sd = 0.25
 c_seed = 1
 
+extra_K_conc = 4
+
 original_gs, g_parameters = ms.get_original_params(model_number)
 upper_bounds = prior_upper_bounds(original_gs)
 
@@ -58,6 +60,7 @@ ap = ap_simulator.APSimulator()
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
 ap.DefineModel(model_number)
+ap.SetExtracellularPotassiumConc(extra_K_conc)
 
 opts = cma.CMAOptions()
 opts['seed'] = 1

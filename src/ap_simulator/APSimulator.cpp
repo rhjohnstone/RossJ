@@ -305,3 +305,20 @@ void APSimulator::SetExperimentalTraceAndTimesForDataClamp(const std::vector<dou
     boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->SetExperimentalData(expt_times,expt_trace);
     mExptTrace = expt_trace;
 }
+
+void APSimulator::SetExtracellularPotassiumConc( double extra_K_conc )
+{
+    try
+    {
+        mpModel->SetParameter("extracellular_potassium_concentration", extra_K_conc);
+    }
+    catch
+    {
+        std::cerr << "No extracellular_potassium_concentration parameter in model" << std::endl << std::flush;
+    }
+}
+
+
+
+
+
