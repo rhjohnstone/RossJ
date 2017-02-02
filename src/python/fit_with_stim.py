@@ -35,9 +35,12 @@ print expt_trace
 model_number = 6
 protocol = 1
 
-solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
+#solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
 
-stimulus_start_time = 9.5 # manually from looking, should really set it exactly from original trace files
+stimulus_start_time = 0 # manually from looking, should really set it exactly from original trace files
+stimulus_magnitude = -25.5
+stimulus_duration = 2
+stimulus_period = 1000
 
 solve_start = expt_times[0]
 solve_end = expt_times[-1]
@@ -100,4 +103,6 @@ ax.plot(expt_times,expt_trace,color='red', label='Expt')
 ax.plot(times,true_trace,color='blue',label='Original')
 ax.plot(times,best_fit_trace,color='green',label='Best fit')
 ax.legend()
-plt.show(block=True)
+fig.tight_layout()
+fig.savefig("ken_trace_fit_to_model_{}.png".format(model_number))
+plt.close()
