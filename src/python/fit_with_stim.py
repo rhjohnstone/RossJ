@@ -15,15 +15,13 @@ pool = mp.Pool(num_cores)
 def prior_upper_bounds(original_gs):
     return 100*np.array(original_gs)
 
-def sum_of_square_diffs(params,expt_trace,upper_bounds,cell):
+def sum_of_square_diffs(params)#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
         #print test_gs
         return np.inf
-    test_trace = cell.SolveForVoltageTraceWithParams(params)
+    test_trace = ap.SolveForVoltageTraceWithParams(params)
     return np.sum((test_trace-expt_trace)**2)
     
-def par_sum_of_square_diffs(a_b_c_d):
-    return sum_of_square_diffs(*a_b_c_d)
 
 temp_dog_AP_file = "projects/RossJ/python/input/ken/033-2016090801_ControlRO01_1Hz_averagedTrace.txt"
 dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
@@ -88,7 +86,7 @@ sigma0 = 0.00001
 es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
 while not es.stop():
     X = es.ask()
-    temp_vals = pool.map(par_sum_of_square_diffs,it.izip(X,it.repeat(expt_trace),it.repeat(upper_bounds),it.repeat(ap)))
+    temp_vals = pool.map(sum_of_square_diffs,X)
     #temp_vals = [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X]
     es.tell(X, temp_vals)
     es.disp()
