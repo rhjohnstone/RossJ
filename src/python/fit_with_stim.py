@@ -15,7 +15,7 @@ pool = mp.Pool(num_cores)
 def prior_upper_bounds(original_gs):
     return 100*np.array(original_gs)
 
-def sum_of_square_diffs(params)#,expt_trace,upper_bounds,ap):
+def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
         #print test_gs
         return np.inf
@@ -77,7 +77,7 @@ opts = cma.CMAOptions()
 opts['seed'] = 1
 x0 = np.copy(original_gs)
 
-original_obj_fun = sum_of_square_diffs(x0,expt_trace,upper_bounds,ap)
+original_obj_fun = sum_of_square_diffs(x0)#,expt_trace,upper_bounds,ap)
 print "original_obj_fun =", original_obj_fun
 
 start = time.time()
