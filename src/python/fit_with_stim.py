@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import time
 import mcmc_setup as ms
 import cma
+import multiprocessing as mp
+import itertools as it
+
+num_cores = mp.cpu_count()-1
+if (num_cores < 1):
+    num_cores = 1
+pool = mp.Pool(num_cores)
 
 def prior_upper_bounds(original_gs):
     return 100*np.array(original_gs)
@@ -14,11 +21,14 @@ def sum_of_square_diffs(params,expt_trace,upper_bounds,cell):
         return np.inf
     test_trace = cell.SolveForVoltageTraceWithParams(params)
     return np.sum((test_trace-expt_trace)**2)
+    
+def par_sum_of_square_diffs(a_b_c_d):
+    return sum_of_square_diffs(*a_b_c_d)
 
-temp_dog_AP_file = "projects/RossJ/python/input/dog_traces_csv/dog_AP_trace_001.csv"
-dog_AP = np.loadtxt(temp_dog_AP_file,delimiter=',')
-expt_times = 1000*dog_AP[:,0]
-expt_trace = 1000*dog_AP[:,1]
+temp_dog_AP_file = "projects/RossJ/python/input/ken/033-2016090801_ControlRO01_1Hz_averagedTrace.txt"
+dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
+expt_times = dog_AP[:,0]
+expt_trace = dog_AP[:,1]
 
 print expt_times
 print expt_trace
@@ -32,7 +42,7 @@ print expt_trace
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
 
-model_number = 6
+model_number = 3
 protocol = 1
 
 #solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
@@ -78,7 +88,9 @@ sigma0 = 0.00001
 es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
 while not es.stop():
     X = es.ask()
-    es.tell(X, [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X])
+    temp_vals = pool.map(par_sum_of_square_diffs,it.izip(X,it.repeat(expt_trace),it.repeat(upper_bounds),it.repeat(ap)))
+    #temp_vals = [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X]
+    es.tell(X, temp_vals)
     es.disp()
 res = es.result()
 time_taken = time.time()-start
