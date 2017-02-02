@@ -312,9 +312,10 @@ void APSimulator::SetExtracellularPotassiumConc( double extra_K_conc )
     {
         mpModel->SetParameter("extracellular_potassium_concentration", extra_K_conc);
     }
-    catch
+    catch (Exception &e)
     {
         std::cerr << "No extracellular_potassium_concentration parameter in model" << std::endl << std::flush;
+        std::cerr << "error was " << e.GetShortMessage() << std::endl << std::flush;
     }
 }
 
