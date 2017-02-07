@@ -107,7 +107,7 @@ def normalised_sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
 
 
 
-original_obj_fun = sum_of_square_diffs(x0)#,expt_trace,upper_bounds,ap)
+original_obj_fun = sum_of_square_diffs(x0,expt_trace,upper_bounds,ap)#,expt_trace,upper_bounds,ap)
 print "original_obj_fun =", original_obj_fun
 
 start = time.time()
