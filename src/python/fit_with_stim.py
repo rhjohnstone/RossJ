@@ -1,5 +1,7 @@
 import ap_simulator
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import time
 import mcmc_setup as ms
@@ -15,7 +17,7 @@ def prior_upper_bounds(original_gs):
 
     
 
-temp_dog_AP_file = "projects/RossJ/python/input/ken/033-2016090801_ControlRO01_1Hz_averagedTrace.txt"
+temp_dog_AP_file = "projects/RossJ/python/input/ken/036-2014091101 Control 1Hz analyzed.txt_averagedTrace.txt"
 dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
 expt_times = dog_AP[:,0]
 expt_trace = dog_AP[:,1]
