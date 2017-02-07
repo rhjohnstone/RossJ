@@ -84,7 +84,14 @@ opts = cma.CMAOptions()
 opts['seed'] = 1
 x0 = np.copy(original_gs)
 
-def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
+#def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
+#    if np.any(params<0) or np.any(params>upper_bounds):
+#        #print test_gs
+#        return np.inf
+#    test_trace = ap.SolveForVoltageTraceWithParams(params)
+#    return np.sum((test_trace-expt_trace)**2)
+
+def sum_of_square_diffs(params,expt_trace,upper_bounds,ap):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
         #print test_gs
         return np.inf
