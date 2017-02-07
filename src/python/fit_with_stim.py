@@ -12,6 +12,7 @@ import itertools as it
 import sys
 
 python_seed = sys.argv[1]
+npr.seed(python_seed)
 
 def prior_upper_bounds(original_gs):
     return 100*np.array(original_gs)
@@ -78,7 +79,8 @@ ap.SetExtracellularPotassiumConc(extra_K_conc)
 
 opts = cma.CMAOptions()
 opts['seed'] = 1
-x0 = np.copy(original_gs)
+#x0 = np.copy(original_gs)
+x0 = 100*npr.rand(len(original_gs))
 
 def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
