@@ -162,3 +162,4 @@ params_file = "ken_best_fit_params_model_{}.txt".format(model_number)
 
 with open(params_file,'a') as outfile:
     np.savetxt(outfile,np.concatenate((best_gs,[best_f])), newline=" ")
+    outfile.write("\n")
