@@ -11,7 +11,7 @@ import multiprocessing as mp
 import itertools as it
 import sys
 
-python_seed = sys.argv[1]
+python_seed = int(sys.argv[1])
 npr.seed(python_seed)
 
 def prior_upper_bounds(original_gs):
@@ -78,7 +78,7 @@ ap.DefineModel(model_number)
 ap.SetExtracellularPotassiumConc(extra_K_conc)
 
 opts = cma.CMAOptions()
-opts['seed'] = 1
+opts['seed'] = 100*python_seed
 #x0 = np.copy(original_gs)
 x0 = 100*npr.rand(len(original_gs))
 
