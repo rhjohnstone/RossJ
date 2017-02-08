@@ -319,7 +319,10 @@ void APSimulator::SetExtracellularPotassiumConc( double extra_K_conc )
     }
 }
 
-
+void APSimulator::SetNumberOfSolves( unsigned num_solves )
+{
+    mHowManySolves = num_solves;
+}
 
 
 

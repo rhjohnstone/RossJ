@@ -30,6 +30,11 @@ dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
 expt_times = dog_AP[:,0]
 expt_trace = dog_AP[:,1]
 
+save_pts = np.where(expt_times <= 500)
+expt_times_chop = expt_times[save_pts]
+expt_trace_chop = expt_trace[save_pts]
+
+
 #scaled_expt_trace = normalise_trace(expt_trace)
 
 print expt_times
@@ -66,6 +71,8 @@ c_seed = 1
 
 extra_K_conc = 4
 
+num_solves = 3
+
 original_gs, g_parameters = ms.get_original_params(model_number)
 #upper_bounds = prior_upper_bounds(original_gs)
 upper_bounds = [np.inf]*len(original_gs)
@@ -73,6 +80,7 @@ upper_bounds = [np.inf]*len(original_gs)
 times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 
 ap = ap_simulator.APSimulator()
+ap.SetNumberOfSolves(num_solves)
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
 ap.DefineModel(model_number)
@@ -93,7 +101,7 @@ def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
         #print test_gs
         return np.inf
     test_trace = ap.SolveForVoltageTraceWithParams(params)
-    return np.sum((test_trace-expt_trace)**2)
+    return np.sum((test_trace[save_pts]-expt_trace_chop)**2)
     
 def normalised_sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
@@ -142,23 +150,23 @@ print "best_gs:", best_gs
 
 #print original_gs/best_gs
 
-#true_trace = ap.SolveForVoltageTraceWithParams(original_gs)
+true_trace = ap.SolveForVoltageTraceWithParams(original_gs)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.grid()
 #ax.plot(expt_times,scaled_expt_trace,color='red', label='Expt')
 ax.plot(expt_times,expt_trace,color='red', label='Expt')
-#ax.plot(times,true_trace,color='blue',label='Original')
+ax.plot(times,true_trace,color='blue',label='Original')
 ax.plot(times,best_fit_trace,color='green',label='Best fit')
 ax.legend()
 fig.tight_layout()
 #fig.savefig("ken_normalised_trace_fit_to_model_{}_python_seed_{}.png".format(model_number,python_seed))
-fig.savefig("ken_trace_fit_to_model_{}_python_seed_{}.png".format(model_number,python_seed))
+fig.savefig("ken_trace_fit_to_model_{}_python_seed_{}_chop.png".format(model_number,python_seed))
 plt.close()
 
 #params_file = "ken_normalised_best_fit_params_model_{}.txt".format(model_number)
-params_file = "ken_best_fit_params_model_{}.txt".format(model_number)
+params_file = "ken_best_fit_params_model_{}_chop.txt".format(model_number)
 
 with open(params_file,'a') as outfile:
     np.savetxt(outfile,np.concatenate((best_gs,[best_f])), newline=" ")
