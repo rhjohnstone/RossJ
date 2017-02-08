@@ -169,5 +169,7 @@ plt.close()
 params_file = "ken_best_fit_params_model_{}_chop.txt".format(model_number)
 
 with open(params_file,'a') as outfile:
-    np.savetxt(outfile,np.concatenate((best_gs,[best_f])), newline=" ")
-    outfile.write("\n")
+    outfile.write("py_seed: " + str(python_seed) + "\n")
+    outfile.write("initial: " + str(x0) + "\n")
+    outfile.write("best_gs: " + str(best_gs) + "\n")
+    outfile.write("best_f:  " + str(best_f) + "\n\n")
