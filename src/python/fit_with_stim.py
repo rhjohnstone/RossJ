@@ -44,7 +44,7 @@ print expt_trace
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
 
-model_number = 3
+model_number = 5
 protocol = 1
 
 #solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
@@ -67,7 +67,8 @@ c_seed = 1
 extra_K_conc = 4
 
 original_gs, g_parameters = ms.get_original_params(model_number)
-upper_bounds = prior_upper_bounds(original_gs)
+#upper_bounds = prior_upper_bounds(original_gs)
+upper_bounds = [np.inf]*len(original_gs)
 
 times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 
@@ -80,7 +81,12 @@ ap.SetExtracellularPotassiumConc(extra_K_conc)
 opts = cma.CMAOptions()
 opts['seed'] = 100*python_seed
 #x0 = np.copy(original_gs)
-x0 = 100*npr.rand(len(original_gs))
+x0 = original_gs * (1. + npr.randn(len(original_gs)))
+
+x0[np.where(x0<0)] = 1e-5
+
+print "x0 =", x0
+#sys.exit()
 
 def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
@@ -100,6 +106,8 @@ def normalised_sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
 
 original_obj_fun = sum_of_square_diffs(x0)#,expt_trace,upper_bounds,ap)
 print "original_obj_fun =", original_obj_fun
+
+#sys.exit()
 
 start = time.time()
 
@@ -153,5 +161,4 @@ plt.close()
 params_file = "ken_best_fit_params_model_{}.txt".format(model_number)
 
 with open(params_file,'a') as outfile:
-    np.savetxt(params_file,np.concatenate((best_gs,[best_f])), newline=" ")
-    outfile.write("\n")
+    np.savetxt(outfile,np.concatenate((best_gs,[best_f])), newline=" ")
