@@ -4,8 +4,8 @@ import ap_simulator
 import mcmc_setup as ms
 import numpy as np
 import numpy.random as npr
-#import matplotlib
-#matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from time import time
 import multiprocessing as mp
@@ -164,10 +164,22 @@ print "\nTotal time taken by MCMC:", time_taken, "s\n"
 with open(chain_file,'a') as outfile:
     np.savetxt(outfile,chain)
 
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.hist(chain[burn:,0],bins=40)
-plt.show(block=True)
+for i in xrange(num_params):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.hist(chain[burn:,i],bins=40,normed=True,color='blue',edgecolor='blue')
+    try:
+        ax.set_xlabel("$"+g_parameters[i]+"$")
+    except:
+        ax.set_xlabel(r'$\sigma$')
+    ax.set_ylabel('Normalised frequency')
+    fig.tight_layout()
+    try:
+        fig.savefig(figs_dir+g_parameters[i]+'_normalised_hist.png')
+    except:
+        fig.savefig(figs_dir+'sigma_normalised_hist.png')
+    plt.close()
+    
 
 
 
