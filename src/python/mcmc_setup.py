@@ -65,7 +65,7 @@ def get_protocol_details(protocol): # pre-defined protocols
     
 def synthetic_nonhierarchical_chain_file_and_figs_dir(model,protocol,python_seed): # synthetic data
     # keeping it outside of Chaste build folder, in case that gets wiped in a clean build, or something
-    output_dir = os.path.expanduser('~/RossJ_output/synthetic/nonhierarchical/model_{}/protocol_{}/python_seed_{}/'.format(model,protocol,python_seed))
+    output_dir = os.path.expanduser('projects/RossJ/python/output/synthetic/nonhierarchical/model_{}/protocol_{}/python_seed_{}/'.format(model,protocol,python_seed))
     chain_dir = output_dir + 'chain/'
     figs_dir = output_dir + 'figures/'
     for d in [chain_dir,figs_dir]:

@@ -18,10 +18,10 @@
 #include "luo_rudy_1991Cvode.hpp"
 #include "ten_tusscher_model_2004_epiCvode.hpp"
 //#include "ten_tusscher_model_2004_epiCvodeOpt.hpp" // trying to catch blip "davies_isap_2012CvodeDataClampOpt.hpp"
-#include "ohara_rudy_2011_endoCvode.hpp"
+#include "ohara_rudy_2011_endoCvodeDataClamp.hpp"
 #include "davies_isap_2012CvodeDataClamp.hpp"
 //#include "davies_isap_2012Cvode.hpp"
-#include "paci_hyttinen_aaltosetala_severi_ventricularVersionCvode.hpp"
+#include "paci_hyttinen_aaltosetala_severi_ventricularVersionCvodeDataClamp.hpp"
 
 APSimulator::APSimulator()
     : mModelNumber(1),
@@ -119,7 +119,7 @@ void APSimulator::DefineModel(unsigned model_number)
     }
     else if ( model_number == 5u )
     {
-        mpModel.reset(new Cellohara_rudy_2011_endoFromCellMLCvode(p_solver, mpStimulus));
+        mpModel.reset(new Cellohara_rudy_2011_endoFromCellMLCvodeDataClamp(p_solver, mpStimulus));
         mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");                        // 75
         mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");                     // 0.0001
         mParameterMetanames.push_back("membrane_background_potassium_current_conductance");               // 0.003
@@ -155,7 +155,7 @@ void APSimulator::DefineModel(unsigned model_number)
     }
     else if ( model_number == 7u ) // Paci ventricular
     {
-        mpModel.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvode(p_solver, mpStimulus));
+        mpModel.reset(new Cellpaci_hyttinen_aaltosetala_severi_ventricularVersionFromCellMLCvodeDataClamp(p_solver, mpStimulus));
         mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");                                            // 3671.2302
         mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");                                         // 8.635702e-5
         mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");                             // 28.1492
@@ -225,8 +225,23 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParamsWithDataClamp(con
     boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOffDataClamp();
 
     //mpModel->ResetSolver();
+    
+    if (mHowManySolves > 1)
+    {
+        for (unsigned i=0; i<mHowManySolves-1; i++)
+        {
+            mpModel->Compute(mSolveStart, mDataClampOn, mSolveTimestep);
+            mpModel->ResetSolver();
+            boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOnDataClamp(200);
+            mpModel->Compute(mDataClampOn, mDataClampOff, mSolveTimestep);
+            mpModel->ResetSolver();
+            boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOffDataClamp();
+            mpModel->Compute(mDataClampOff, mSolveEnd, mSolveTimestep);
+        }
+    }
+    
     OdeSolution sol1 = mpModel->Compute(mSolveStart, mDataClampOn, mSolveTimestep);
-    voltage_trace = sol1.GetAnyVariable("membrane_voltage");
+    
     mpModel->ResetSolver();
     boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOnDataClamp(200);
     OdeSolution sol2 = mpModel->Compute(mDataClampOn, mDataClampOff, mSolveTimestep);
@@ -234,7 +249,7 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParamsWithDataClamp(con
     boost::static_pointer_cast<AbstractCvodeCellWithDataClamp>(mpModel)->TurnOffDataClamp();
     OdeSolution sol3 = mpModel->Compute(mDataClampOff, mSolveEnd, mSolveTimestep);
 
-
+    voltage_trace = sol1.GetAnyVariable("membrane_voltage");
     std::vector<double> voltage_trace_part_2 = sol2.GetAnyVariable("membrane_voltage");
     std::vector<double> voltage_trace_part_3 = sol3.GetAnyVariable("membrane_voltage");
 
