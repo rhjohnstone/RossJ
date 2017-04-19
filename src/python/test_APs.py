@@ -14,8 +14,9 @@ def example_likelihood_function(trace):
 # 5. O'Hara Rudy
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
+# 8. Decker 2009 dog
 
-for model_number in xrange(6,7):
+for model_number in xrange(8,9):
     #model_number = 4
     protocol = 1
     

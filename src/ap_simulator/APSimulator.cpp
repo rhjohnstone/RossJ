@@ -17,6 +17,7 @@
 #include "beeler_reuter_model_1977Cvode.hpp"
 #include "luo_rudy_1991Cvode.hpp"
 #include "ten_tusscher_model_2004_epiCvode.hpp"
+#include "decker_2009Cvode.hpp"
 //#include "ten_tusscher_model_2004_epiCvodeOpt.hpp" // trying to catch blip "davies_isap_2012CvodeDataClampOpt.hpp"
 #include "ohara_rudy_2011_endoCvodeDataClamp.hpp"
 #include "davies_isap_2012CvodeDataClamp.hpp"
@@ -168,6 +169,16 @@ void APSimulator::DefineModel(unsigned model_number)
         mParameterMetanames.push_back("membrane_transient_outward_current_conductance");                                      // 29.9038
         mParameterMetanames.push_back("membrane_background_sodium_current_conductance");                                      // 0.9
         mParameterMetanames.push_back("membrane_hyperpolarisation_activated_funny_current_potassium_component_conductance");  // 30.10312
+    }
+    else if ( model_number == 8u ) // Decker dog
+    {
+        mpModel.reset(new Celldecker_2009FromCellMLCvode(p_solver, mpStimulus));
+        mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");  // 9.075
+        mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");  //  0.00015552
+        mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");  // 0.5
+        mParameterMetanames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance");  // 0.0826
+        mParameterMetanames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");  // 0.0138542
+        mParameterMetanames.push_back("membrane_transient_outward_current_conductance");  // 0.497458
     }
     mpModel->SetMaxSteps(10000);
 }

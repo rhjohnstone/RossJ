@@ -8,6 +8,7 @@ CHOICE OF CELL MODEL
 5. O'Hara Rudy Endo. '11
 6. Davies 2012
 7. Paci ventricular
+8. Decker 2009 dog
 
 """
 
@@ -50,6 +51,10 @@ def get_original_params(model):
         g_parameters = ['G_{Na}', 'G_{CaL}', 'G_{K1}', 'G_{Ks}',
                         'G_{Kr}', 'G_{pCa}', 'K_{NaCa}', 'G_{bCa}',
                         'P_{NaK}', 'G_{to}', 'G_{bNa}', 'G_f']
+    elif (model==8): # Decker 2009 dog
+        original_gs = [9.075, 0.00015552, 0.5, 0.0826, 0.0138542, 0.497458]
+        g_parameters = ['G_{Na}', 'G_{CaL}', 'G_{K1}', 'G_{Ks}',
+                        'G_{Kr}', 'G_{to}']
     return original_gs, g_parameters
     
 def get_protocol_details(protocol): # pre-defined protocols
