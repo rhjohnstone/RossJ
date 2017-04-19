@@ -6,6 +6,7 @@
 #include "APSimulator.hpp"
 #include "FakePetscSetup.hpp"
 
+
 class TestArchiveSteadyState : public CxxTest::TestSuite
 {
 public:
@@ -15,7 +16,7 @@ public:
 
         double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
         
-        double solve_start = 0, solve_end = 400, solve_timestep = 0.2;
+        double solve_start = 0, solve_end = 400, solve_timestep = 0.1;
     
         unsigned model_number = 8u; // 8. Decker 2009 dog
     
@@ -30,6 +31,13 @@ public:
         {
             std::cout << parameter_metanames[i] << std::endl << std::flush;
         }
+        
+        SteadyStateRunner steady_runner(mpModel);
+        
+        unsigned max_paces = 10000u;
+        steady_runner.SetMaxNumPaces(max_paces);
+        result = steady_runner.RunToSteadyState();
+        TS_ASSERT_EQUALS(result,true);
 
 #else
         std::cout << "Cvode is not enabled.\n";
