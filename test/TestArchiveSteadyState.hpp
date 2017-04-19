@@ -38,7 +38,7 @@ public:
         
         unsigned max_paces = 10000u;
         steady_runner.SetMaxNumPaces(max_paces);
-        result = steady_runner.RunToSteadyState();
+        bool result = steady_runner.RunToSteadyState();
         TS_ASSERT_EQUALS(result,true);
 
 #else
