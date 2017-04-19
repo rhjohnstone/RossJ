@@ -12,6 +12,7 @@ import itertools as it
 import sys
 
 python_seed = int(sys.argv[1])
+trace_number = 97
 npr.seed(python_seed)
 
 def prior_upper_bounds(original_gs):
@@ -25,20 +26,24 @@ def normalise_trace(trace):
     return scaled_trace
     
 
-temp_dog_AP_file = "projects/RossJ/python/input/ken/036-2014091101 Control 1Hz analyzed.txt_averagedTrace.txt"
-dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
-expt_times = dog_AP[:,0]
-expt_trace = dog_AP[:,1]
+#temp_dog_AP_file = "projects/RossJ/python/input/ken/036-2014091101 Control 1Hz analyzed.txt_averagedTrace.txt"
+#dog_AP = np.loadtxt(temp_dog_AP_file)#,delimiter=',')
+#expt_times = dog_AP[:,0]
+#expt_trace = dog_AP[:,1]
 
-save_pts = np.where(expt_times <= 500)
-expt_times_chop = expt_times[save_pts]
-expt_trace_chop = expt_trace[save_pts]
+expt_dir = "/home/rossj/Documents/roche_data/2017-01_data/170123_2_2"
+traces_dir = expt_dir + '/traces'
+output_dir = expt_dir + '/output'
+
+AP = np.loadtxt(traces_dir+'/{}.csv'.format(trace_number),delimiter=',')
+expt_times = AP[:,0]
+expt_trace = AP[:,1]
 
 
 #scaled_expt_trace = normalise_trace(expt_trace)
 
-print expt_times
-print expt_trace
+plt.plot(expt_times,expt_trace)
+plt.show()
 
 
 # 1. Hodgkin Huxley
@@ -49,13 +54,13 @@ print expt_trace
 # 6. Davies (canine)
 # 7. Paci (SC-CM ventricular)
 
-model_number = 5
+model_number = 7
 protocol = 1
 
 #solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
 
-stimulus_start_time = 0 # manually from looking, should really set it exactly from original trace files
-stimulus_magnitude = -25.5
+stimulus_start_time = 50 # manually from looking, should really set it exactly from original trace files
+stimulus_magnitude = 0 # -25.5
 stimulus_duration = 2
 stimulus_period = 1000
 
@@ -69,9 +74,12 @@ print len(expt_times)
 noise_sd = 0.25
 c_seed = 1
 
+data_clamp_on = 50
+data_clamp_off = 52
+
 extra_K_conc = 4
 
-num_solves = 3
+num_solves = 5
 
 original_gs, g_parameters = ms.get_original_params(model_number)
 #upper_bounds = prior_upper_bounds(original_gs)
@@ -84,6 +92,8 @@ ap.SetNumberOfSolves(num_solves)
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
 ap.DefineModel(model_number)
+ap.UseDataClamp(data_clamp_on, data_clamp_off)
+ap.SetExperimentalTraceAndTimesForDataClamp(expt_times, expt_trace)
 ap.SetExtracellularPotassiumConc(extra_K_conc)
 
 opts = cma.CMAOptions()
@@ -101,7 +111,7 @@ def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
         #print test_gs
         return np.inf
     test_trace = ap.SolveForVoltageTraceWithParams(params)
-    return np.sum((test_trace[save_pts]-expt_trace_chop)**2)
+    return np.sum((test_trace-expt_trace)**2)
     
 def normalised_sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
@@ -162,11 +172,11 @@ ax.plot(times,best_fit_trace,color='green',label='Best fit')
 ax.legend()
 fig.tight_layout()
 #fig.savefig("ken_normalised_trace_fit_to_model_{}_python_seed_{}.png".format(model_number,python_seed))
-fig.savefig("ken_trace_fit_to_model_{}_python_seed_{}_chop.png".format(model_number,python_seed))
+fig.savefig(output_dir + "trace_{}_fit_to_model_{}_python_seed_{}.png".format(trace_number,model_number,python_seed))
 plt.close()
 
 #params_file = "ken_normalised_best_fit_params_model_{}.txt".format(model_number)
-params_file = "ken_best_fit_params_model_{}_chop.txt".format(model_number)
+params_file = output_dir + "trace_{}_best_fit_params_model_{}.txt".format(trace_number,model_number)
 
 with open(params_file,'a') as outfile:
     outfile.write("py_seed: " + str(python_seed) + "\n")

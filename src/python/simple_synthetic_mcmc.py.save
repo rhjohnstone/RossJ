@@ -4,8 +4,8 @@ import ap_simulator
 import mcmc_setup as ms
 import numpy as np
 import numpy.random as npr
-#import matplotlib
-#matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from time import time
 import multiprocessing as mp
@@ -54,8 +54,7 @@ protocol = 1
 solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
 original_gs, g_parameters = ms.get_original_params(model)
 
-
-solve_end = 100 # just for HH
+solve_end = 1
 
 ap = ap_simulator.APSimulator()
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
@@ -74,8 +73,8 @@ num_pts = int((solve_end-solve_start)/solve_timestep)+1
 expt_times = np.linspace(solve_start,solve_end,num_pts)
 expt_trace = get_test_trace(original_gs)
 expt_trace += noise_sigma*(npr.randn(num_pts))
-plt.plot(expt_trace)
-plt.show(block=True)
+#plt.plot(expt_trace)
+#plt.show(block=True)
 
 
 
