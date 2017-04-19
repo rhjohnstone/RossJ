@@ -32,7 +32,9 @@ public:
             std::cout << parameter_metanames[i] << std::endl << std::flush;
         }
         
-        SteadyStateRunner steady_runner(mpModel);
+        boost::shared_ptr<AbstractCvodeCell> the_model = simulator.GetModel();
+        
+        SteadyStateRunner steady_runner(the_model);
         
         unsigned max_paces = 10000u;
         steady_runner.SetMaxNumPaces(max_paces);

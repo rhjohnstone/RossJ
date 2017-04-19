@@ -350,5 +350,8 @@ void APSimulator::SetNumberOfSolves( unsigned num_solves )
     mHowManySolves = num_solves;
 }
 
-
+boost::shared_ptr<AbstractCvodeCell> APSimulator::GetModel()
+{
+    return mpModel;
+}
 
