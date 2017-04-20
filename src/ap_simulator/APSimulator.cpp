@@ -35,7 +35,8 @@ APSimulator::APSimulator()
       mNumTimePts(2501),
       mUseDataClamp(false),
       mDataClampOn(0),
-      mDataClampOff(1)
+      mDataClampOff(1),
+      mHaveRunToSteadyState(false)
 {
     //RedirectStdErr();
     std::cerr << "*** INSIDE CONSTRUCTOR (nothing should happen here) ***" << std::endl << std::flush;
@@ -77,6 +78,7 @@ void APSimulator::DefineSolveTimes(double solve_start, double solve_end, double 
 
 void APSimulator::DefineModel(unsigned model_number)
 {
+    mModelNumber = model_number;
     boost::shared_ptr<AbstractIvpOdeSolver> p_solver;
     if ( model_number == 1u )
     {
@@ -357,6 +359,30 @@ bool APSimulator::RunToSteadyState()
     unsigned max_paces = 10000u;
     steady_runner.SetMaxNumPaces(max_paces);
     bool result = steady_runner.RunToSteadyState();
+    mHaveRunToSteadyState = result;
     return result;
 }
+
+void APSimulator::ArchiveStateVariables()
+{
+    OutputFileHandler handler("archive", false);
+    handler.SetArchiveDirectory();
+    std::string arch_name = "m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch";
+    boost::filesystem::path arch_dir;
+    if (mHaveRunToSteadyState)
+    {
+        arch_dir = "projects/RossJ/SS_variables/";
+    }
+    else
+    {
+        arch_dir = "projects/RossJ/non_SS_variables/";
+    }
+    boost::filesystem::create_directories(arch_dir);
+    std::ofstream ofs((arch_dir+arch_name).c_str());
+    boost::archive::text_oarchive output_arch(ofs);
+    output_arch <<  *mpModel;
+}
+
+
+
 

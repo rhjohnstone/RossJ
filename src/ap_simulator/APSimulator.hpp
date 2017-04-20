@@ -23,6 +23,7 @@ private:
     bool mUseDataClamp;
     double mDataClampOn;
     double mDataClampOff;
+    bool mHaveRunToSteadyState;
 public:
     APSimulator();
     ~APSimulator();
@@ -43,6 +44,7 @@ public:
     void SetNumberOfSolves( unsigned num_solves );
     boost::shared_ptr<AbstractCvodeCell> GetModel();
     bool RunToSteadyState();
+    void ArchiveStateVariables();
 };
 
 
