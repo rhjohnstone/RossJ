@@ -42,6 +42,7 @@ public:
     void SetExtracellularPotassiumConc( double extra_K_conc );
     void SetNumberOfSolves( unsigned num_solves );
     boost::shared_ptr<AbstractCvodeCell> GetModel();
+    bool RunToSteadyState();
 };
 
 

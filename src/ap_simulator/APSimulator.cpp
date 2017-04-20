@@ -12,6 +12,7 @@
 
 #include "CheckpointArchiveTypes.hpp"
 #include "ArchiveLocationInfo.hpp"
+#include "SteadyStateRunner.hpp"
 
 #include "hodgkin_huxley_squid_axon_model_1952_modifiedCvode.hpp"
 #include "beeler_reuter_model_1977Cvode.hpp"
@@ -350,8 +351,12 @@ void APSimulator::SetNumberOfSolves( unsigned num_solves )
     mHowManySolves = num_solves;
 }
 
-boost::shared_ptr<AbstractCvodeCell> APSimulator::GetModel()
+bool APSimulator::RunToSteadyState()
 {
-    return mpModel;
+    SteadyStateRunner steady_runner(mpModel);
+    unsigned max_paces = 10000u;
+    steady_runner.SetMaxNumPaces(max_paces);
+    bool result = steady_runner.RunToSteadyState();
+    return result;
 }
 
