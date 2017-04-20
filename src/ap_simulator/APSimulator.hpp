@@ -45,6 +45,7 @@ public:
     boost::shared_ptr<AbstractCvodeCell> GetModel();
     bool RunToSteadyState();
     void ArchiveStateVariables();
+    void LoadStateVariables();
 };
 
 

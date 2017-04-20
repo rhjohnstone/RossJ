@@ -85,7 +85,7 @@ public:
         std::cout << "Cvode is not enabled.\n";
 #endif
     }
-    void LoadArchiveSSVariables() throw(Exception)
+    void TestLoadArchiveSSVariables() throw(Exception)
     {
 #ifdef CHASTE_CVODE
 
