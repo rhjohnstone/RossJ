@@ -60,7 +60,7 @@ public:
         std::cout << "Cvode is not enabled.\n";
 #endif
     }
-    void TestArchiveSSVariables() throw(Exception)
+    void xTestArchiveSSVariables() throw(Exception)
     {
 #ifdef CHASTE_CVODE
 
@@ -80,6 +80,32 @@ public:
         TS_ASSERT_EQUALS(result,true);
         
         simulator.ArchiveStateVariables();
+
+#else
+        std::cout << "Cvode is not enabled.\n";
+#endif
+    }
+    void LoadArchiveSSVariables() throw(Exception)
+    {
+#ifdef CHASTE_CVODE
+
+        double stimulus_magnitude = -25.5, stimulus_duration = 2, stimulus_period = 1000, stimulus_start_time = 20;
+        
+        double solve_start = 0, solve_end = 400, solve_timestep = 0.1;
+    
+        unsigned model_number = 8u; // 8. Decker 2009 dog
+    
+        APSimulator simulator;
+        
+        simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
+        simulator.DefineModel(model_number);
+        
+        bool result = simulator.RunToSteadyState();
+        TS_ASSERT_EQUALS(result,true);
+        
+        APSimulator simulator2;
+        simulator2.LoadStateVariables();
 
 #else
         std::cout << "Cvode is not enabled.\n";

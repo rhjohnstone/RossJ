@@ -383,6 +383,11 @@ void APSimulator::ArchiveStateVariables()
     output_arch <<  *mpModel;
 }
 
-
-
+void APSimulator::LoadStateVariables()
+{
+    boost::filesystem::path arch_dir = "projects/RossJ/archived_variables/steady_state/";
+    std::ifstream ifs((arch_dir.string() + "m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch").c_str(), std::ios::binary);
+    boost::archive::text_iarchive input_arch(ifs);
+    input_arch >> *mpModel;
+}
 
