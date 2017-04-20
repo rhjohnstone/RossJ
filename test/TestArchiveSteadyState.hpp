@@ -106,9 +106,9 @@ public:
         
         APSimulator simulator2;
         
-        simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
-        simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
-        simulator.DefineModel(model_number);
+        simulator2.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+        simulator2.DefineSolveTimes(solve_start, solve_end, solve_timestep);
+        simulator2.DefineModel(model_number);
         simulator2.LoadStateVariables();
 
 #else
