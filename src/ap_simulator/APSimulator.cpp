@@ -378,7 +378,7 @@ void APSimulator::ArchiveStateVariables()
         arch_dir = "projects/RossJ/non_SS_variables/";
     }
     boost::filesystem::create_directories(arch_dir);
-    std::ofstream ofs((arch_dir+arch_name).c_str());
+    std::ofstream ofs((arch_dir.string()+arch_name).c_str());
     boost::archive::text_oarchive output_arch(ofs);
     output_arch <<  *mpModel;
 }
