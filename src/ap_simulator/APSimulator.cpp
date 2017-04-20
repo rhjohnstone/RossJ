@@ -375,10 +375,10 @@ void APSimulator::ArchiveStateVariables()
         arch_dir = "projects/RossJ/archived_variables/non_steady_state/";
     }
     boost::filesystem::create_directories(arch_dir);
-    OutputFileHandler handler(arch_dir.string(), false);
-    handler.SetArchiveDirectory();
-    std::string arch_name = handler.GetOutputDirectoryFullPath() + "m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch";
-    std::ofstream ofs(arch_name.c_str());
+    //OutputFileHandler handler(arch_dir.string(), false);
+    //handler.SetArchiveDirectory();
+    //std::string arch_name = handler.GetOutputDirectoryFullPath() + "m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch";
+    std::ofstream ofs((arch_dir.string() + "m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch").c_str());
     boost::archive::text_oarchive output_arch(ofs);
     output_arch <<  *mpModel;
 }
