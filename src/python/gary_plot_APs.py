@@ -7,7 +7,10 @@ import mcmc_setup as ms
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+expt = 1
 
+params_file = "gary_decker_params.txt"
+params = np.loadtxt(params_file)[expt-1, :]
 
 model_number = 8  # Decker dog
 protocol = 1
@@ -30,19 +33,11 @@ ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_
 ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 ap.DefineModel(model_number)
 ap.SetNumberOfSolves(num_solves)
+ap.LoadStateVariables()
 true_trace = ap.SolveForVoltageTraceWithParams(original_gs)
-
-ap2 = ap_simulator.APSimulator()
-ap2.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
-ap2.DefineSolveTimes(solve_start,solve_end,solve_timestep)
-ap2.DefineModel(model_number)
-ap2.SetNumberOfSolves(num_solves)
-ap2.LoadStateVariables()
-ss_trace = ap2.SolveForVoltageTraceWithParams(original_gs)
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 #ax.plot(times,trace)
 ax.plot(times,true_trace,label='First AP')
-ax.plot(times,ss_trace,label='SS AP')
 plt.show(block=True)
