@@ -2,6 +2,7 @@ import numpy as np
 import numpy.random as npr
 import mcmc_setup as ms
 import ap_simulator
+import matplotlib.pyplot as plt
 
 model_number = 8  # Decker dog
 protocol = 1
