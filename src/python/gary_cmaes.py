@@ -6,6 +6,7 @@ import ap_simulator
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import cma
+import multiprocessing as mp
 
 
 def sum_of_square_diffs(temp_params, expt_trace):
@@ -57,6 +58,7 @@ num_expts = params.shape[0]
 def run_cmaes(expt):
     expt_trace = traces[expt]
     opts = cma.CMAOptions()
+    opts['seed'] = expt+1
     x0 = np.copy(original_gs)
     sigma0 = 0.0001
     es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
@@ -74,8 +76,17 @@ def run_cmaes(expt):
     ax.plot(times, expt_trace)
     fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
     plt.close()
+    return best_params
     
-expt = 0
-run_cmaes(expt)
+#expt = 0
+#run_cmaes(expt)
 
+num_processors = 10
+pool = mp.Pool(num_processors)
+results = pool.map_async(run_cmaes,range(num_expts)).get(9999999)
+pool.close()
+
+all_best_params = np.array(results)
+best_params_file = "gary_decker_best_fits.txt"
+np.savetxt(best_params_file, all_best_params)
 
