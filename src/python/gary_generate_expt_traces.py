@@ -58,9 +58,7 @@ for i in xrange(num_expts):
     ax.plot(times, traces[i, :],alpha=0.1)
 np.savetxt(traces_file, traces)
 
-plt.show(block=True)
-
-
-
+fig.savefig("gary_decker_expt_expt_traces.png".format(expt)
+plt.close()
 
 
