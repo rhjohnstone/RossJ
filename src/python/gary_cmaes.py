@@ -76,6 +76,8 @@ def run_cmaes(expt):
     ax.plot(times, expt_trace)
     fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
     plt.close()
+    temp_params_file = "gary_decker_expt_{}_best_fit_params.txt".format(expt)
+    np.savetxt(temp_params_file, best_params)
     return best_params
     
 #expt = 0
