@@ -2,6 +2,8 @@ import numpy as np
 import numpy.random as npr
 import mcmc_setup as ms
 import ap_simulator
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import cma
 
@@ -55,7 +57,7 @@ num_expts = params.shape[0]
 def run_cmaes(expt):
     expt_trace = traces[expt]
     opts = cma.CMAOptions()
-    x0 = np.ones(len(original_gs))
+    x0 = np.copy(original_gs)
     sigma0 = 0.1
     es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
     while not es.stop():
@@ -66,9 +68,12 @@ def run_cmaes(expt):
     res = es.result()
     best_params = res[0]
     ap.LoadStateVariables()
-    plt.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
-    plt.plot(times, expt_trace)
-    plt.show(block=True)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
+    ax.plot(times, expt_trace)
+    fig.savefig("gary_decker_expt_traces.png")
+    plt.close()
     
 expt = 0
 run_cmaes(expt)
