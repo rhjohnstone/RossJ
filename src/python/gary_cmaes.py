@@ -72,7 +72,7 @@ def run_cmaes(expt):
     ax = fig.add_subplot(111)
     ax.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
     ax.plot(times, expt_trace)
-    fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt)
+    fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
     plt.close()
     
 expt = 0
