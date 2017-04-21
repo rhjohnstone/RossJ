@@ -24,6 +24,7 @@ private:
     double mDataClampOn;
     double mDataClampOff;
     bool mHaveRunToSteadyState;
+    double mStimPeriod;
 public:
     APSimulator();
     ~APSimulator();

@@ -64,6 +64,7 @@ void APSimulator::RedirectStdErr()
 void APSimulator::DefineStimulus(double stimulus_magnitude, double stimulus_duration, double stimulus_period, double stimulus_start_time)
 {
     mpStimulus.reset(new RegularStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time));
+    mStimPeriod = stimulus_period;
 }
 
 void APSimulator::DefineSolveTimes(double solve_start, double solve_end, double solve_timestep)
@@ -207,7 +208,7 @@ std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const
         {
             for (unsigned i=0; i<mHowManySolves-1; i++)
             {
-                mpModel->Compute(mSolveStart, mSolveEnd, mSolveTimestep);
+                mpModel->Compute(mSolveStart, mSolveStart+mStimPeriod, mSolveTimestep);
             }
         }
         //std::cerr << "About to actually try and solve" << std::endl << std::flush;
