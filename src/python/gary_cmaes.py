@@ -58,7 +58,7 @@ def run_cmaes(expt):
     expt_trace = traces[expt]
     opts = cma.CMAOptions()
     x0 = np.copy(original_gs)
-    sigma0 = 0.1
+    sigma0 = 0.0001
     es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
     while not es.stop():
         X = es.ask()
