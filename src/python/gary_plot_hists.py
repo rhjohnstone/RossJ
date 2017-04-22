@@ -1,6 +1,6 @@
 import numpy as np
-#import matplotlib
-#matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import mcmc_setup as ms
 from glob import glob
@@ -32,7 +32,7 @@ for p in xrange(num_params):
     ax1 = fig.add_subplot(111)
     ax1.hist(fit_expt_params[:, p], normed=True, bins=10, color='blue', edgecolor=None, alpha=0.5, label="Expt", zorder=10)
     ax1.hist(best_fit_params[:, p], normed=True, bins=10, color='red', edgecolor=None, alpha=0.5, label="Best fit", zorder=11)
-    ax1.axvline(original_gs[p],color='orange')
+    ax1.axvline(original_gs[p],color='black')
     ax1.legend()
     ax1.set_xlabel(g_parameters[p])
     ax1.set_ylabel("Normalised histogram")
@@ -41,4 +41,7 @@ for p in xrange(num_params):
     pdf_y = norm.pdf(pdf_x, loc=1.1*original_gs[p], scale=0.15*original_gs[p])
     ax1.plot(pdf_x, pdf_y, color='green', label="Expt generating")
     fig.tight_layout()
-    plt.show()
+    fig.savefig("gary_decker_{}_hists.png".format(g_parameters[p]))
+    plt.close()
+    
+    
