@@ -14,7 +14,7 @@ print original_gs, "\n"
 
 mu = 1.1*original_gs
 Sigma = np.diag((0.15*original_gs)**2)
-num_expts = 200
+num_expts = 120
 
 expt_params = npr.multivariate_normal(mu, Sigma, num_expts)
 

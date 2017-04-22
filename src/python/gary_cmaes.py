@@ -83,7 +83,7 @@ def run_cmaes(expt):
 #expt = 0
 #run_cmaes(expt)
 
-num_processors = 10
+num_processors = 3
 pool = mp.Pool(num_processors)
 results = pool.map_async(run_cmaes,range(num_expts)).get(9999999)
 pool.close()

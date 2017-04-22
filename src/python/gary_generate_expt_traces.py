@@ -36,7 +36,7 @@ ap.SetNumberOfSolves(num_solves)
 
 mu = 1.1*original_gs
 Sigma = np.diag((0.15*original_gs)**2)
-num_expts = 200
+num_expts = 120
 
 expt_params = npr.multivariate_normal(mu, Sigma, num_expts)
 
@@ -58,7 +58,7 @@ for i in xrange(num_expts):
     ax.plot(times, traces[i, :],alpha=0.1)
 np.savetxt(traces_file, traces)
 
-fig.savefig("gary_decker_expt_expt_traces.png")
+fig.savefig("gary_decker_expt_traces.png")
 plt.close()
 
 
