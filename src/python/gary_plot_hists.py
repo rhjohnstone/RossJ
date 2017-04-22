@@ -26,6 +26,10 @@ num_solves = 5
 
 model_number = 8
 original_gs, g_parameters = ms.get_original_params(model_number)
+original_gs = np.array(original_gs)
+
+lower_bounds = 0.5*original_gs
+upper_bounds = 2.*original_gs
 
 ap = ap_simulator.APSimulator()
 ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
