@@ -60,7 +60,7 @@ public:
         std::cout << "Cvode is not enabled.\n";
 #endif
     }
-    void xTestArchiveSSVariables() throw(Exception)
+    void TestArchiveSSVariables() throw(Exception)
     {
 #ifdef CHASTE_CVODE
 
@@ -85,7 +85,7 @@ public:
         std::cout << "Cvode is not enabled.\n";
 #endif
     }
-    void TestLoadArchiveSSVariables() throw(Exception)
+    void xTestLoadArchiveSSVariables() throw(Exception)
     {
 #ifdef CHASTE_CVODE
 
