@@ -5,9 +5,33 @@ import matplotlib.pyplot as plt
 import mcmc_setup as ms
 from glob import glob
 from scipy.stats import norm
+import ap_simulator
+
+
+def sum_of_square_diffs(temp_params, expt_trace):
+    if np.any(temp_params < lower_bounds) or np.any(temp_params > upper_bounds):
+        return 1e9
+    else:
+        ap.LoadStateVariables()
+        temp_trace = ap.SolveForVoltageTraceWithParams(temp_params)
+        return np.sum((temp_trace-expt_trace)**2)
+        
+
+protocol = 1
+solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time = ms.get_protocol_details(protocol)
+
+solve_timestep = 0.1
+num_solves = 5
+        
 
 model_number = 8
 original_gs, g_parameters = ms.get_original_params(model_number)
+
+ap = ap_simulator.APSimulator()
+ap.DefineStimulus(stimulus_magnitude,stimulus_duration,stimulus_period,stimulus_start_time)
+ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
+ap.DefineModel(model_number)
+ap.SetNumberOfSolves(num_solves)
 
 params_file = "gary_decker_params.txt"
 expt_params = np.loadtxt(params_file)
@@ -25,8 +49,16 @@ fit_expt_params = expt_params[sorted_inds,:]
 best_fit_params = np.zeros((num_expts, num_params))
 for i in xrange(num_expts):
     best_fit_params[i, :] = np.loadtxt(best_fit_params_files[i])
+    
+traces_file = "gary_decker_traces.txt"
+traces = np.loadtxt(traces_file)
+for i, expt in enumerate(expts):
+    params = best_fit_params[i,:]
+    expt_trace = traces[expt,:]
+    print "best params sos:", sum_of_square_diffs(params, expt_trace)
+    print "true sos:", sum_of_square_diffs(fit_expt_params[i], expt_trace), "\n"
 
-num_pts = 201
+"""num_pts = 201
 for p in xrange(num_params):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
@@ -42,6 +74,6 @@ for p in xrange(num_params):
     ax1.plot(pdf_x, pdf_y, color='green', label="Expt generating")
     fig.tight_layout()
     fig.savefig("gary_decker_{}_hists.png".format(g_parameters[p]))
-    plt.close()
+    plt.close()"""
     
     

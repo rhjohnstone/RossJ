@@ -32,8 +32,6 @@ ap.DefineSolveTimes(solve_start,solve_end,solve_timestep)
 ap.DefineModel(model_number)
 ap.SetNumberOfSolves(num_solves)
 
-
-
 mu = 1.1*original_gs
 Sigma = np.diag((0.15*original_gs)**2)
 num_expts = 120
