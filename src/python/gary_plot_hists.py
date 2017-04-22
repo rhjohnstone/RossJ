@@ -22,7 +22,8 @@ solve_start,solve_end,solve_timestep,stimulus_magnitude,stimulus_duration,stimul
 
 solve_timestep = 0.1
 num_solves = 5
-        
+
+times = np.arange(solve_start,solve_end+solve_timestep,solve_timestep)
 
 model_number = 8
 original_gs, g_parameters = ms.get_original_params(model_number)
