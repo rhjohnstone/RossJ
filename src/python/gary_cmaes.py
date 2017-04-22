@@ -78,17 +78,18 @@ def run_cmaes(expt):
     plt.close()
     temp_params_file = "gary_decker_expt_{}_best_fit_params.txt".format(expt)
     np.savetxt(temp_params_file, best_params)
+    print "best sos =", res[1]
     return best_params
     
-#expt = 0
-#run_cmaes(expt)
+expt = 0
+answer = run_cmaes(expt)
 
-num_processors = 3
+"""num_processors = 3
 pool = mp.Pool(num_processors)
 results = pool.map_async(run_cmaes,range(num_expts)).get(9999999)
 pool.close()
 
 all_best_params = np.array(results)
 best_params_file = "gary_decker_best_fits.txt"
-np.savetxt(best_params_file, all_best_params)
+np.savetxt(best_params_file, all_best_params)"""
 

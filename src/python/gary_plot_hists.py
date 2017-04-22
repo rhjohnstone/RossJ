@@ -58,8 +58,8 @@ for i in xrange(num_expts):
 traces_file = "gary_decker_traces.txt"
 traces = np.loadtxt(traces_file)
 for i, expt in enumerate(expts):
-    
     expt_trace = traces[expt,:]
+    print "expt", expt
     print "best params sos:", sum_of_square_diffs(best_fit_params[i,:], expt_trace)
     print "true sos:", sum_of_square_diffs(expt_params[expt,:], expt_trace), "\n"
     fig = plt.figure()
