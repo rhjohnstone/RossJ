@@ -8,4 +8,4 @@ params_file = "gary_decker_params.txt"
 expt_params = np.loadtxt(params_file)
 
 best_fit_params = glob("gary_decker_expt_*_best_fit_params.txt")
-print best_fit_params
+expts = [int(x.split("_")[3]) for x in best_fit_params]
