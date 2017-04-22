@@ -60,7 +60,11 @@ for i, expt in enumerate(expts):
     params = best_fit_params[i,:]
     expt_trace = traces[expt,:]
     print "best params sos:", sum_of_square_diffs(params, expt_trace)
-    print "true sos:", sum_of_square_diffs(fit_expt_params[i], expt_trace), "\n"
+    print "true sos:", sum_of_square_diffs(fit_expt_params[i,:], expt_trace), "\n"
+    plt.plot(times, expt_trace)
+    plt.plot(times, ap.SolveForVoltageTraceWithParams(temp_params), label="Best fit")
+    plt.plot(times, ap.SolveForVoltageTraceWithParams(fit_expt_params[i,:]), label="Original")
+    plt.show()
 
 """num_pts = 201
 for p in xrange(num_params):
