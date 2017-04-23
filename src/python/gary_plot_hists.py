@@ -57,7 +57,7 @@ for i in xrange(num_expts):
     
 traces_file = "gary_decker_traces.txt"
 traces = np.loadtxt(traces_file)
-for i, expt in enumerate(expts):
+"""for i, expt in enumerate(expts):
     expt_trace = traces[expt,:]
     print "expt", expt
     print "best params sos:", sum_of_square_diffs(best_fit_params[i,:], expt_trace)
@@ -68,9 +68,9 @@ for i, expt in enumerate(expts):
     ax.plot(times, ap.SolveForVoltageTraceWithParams(best_fit_params[i,:]), label="Best fit")
     ax.plot(times, ap.SolveForVoltageTraceWithParams(expt_params[expt,:]), label="Original")
     ax.legend()
-    plt.show()
+    plt.show()"""
 
-"""num_pts = 201
+num_pts = 201
 for p in xrange(num_params):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
@@ -86,6 +86,6 @@ for p in xrange(num_params):
     ax1.plot(pdf_x, pdf_y, color='green', label="Expt generating")
     fig.tight_layout()
     fig.savefig("gary_decker_{}_hists.png".format(g_parameters[p]))
-    plt.close()"""
+    plt.close()
     
     
