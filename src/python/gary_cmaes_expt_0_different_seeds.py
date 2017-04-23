@@ -59,7 +59,8 @@ def run_cmaes(seed):
     expt = 0
     expt_trace = traces[expt]
     opts = cma.CMAOptions()
-    opts['seed'] = seed
+    #opts['seed'] = seed
+    npr.seed(seed)
     x0 = lower_bounds + (upper_bounds-lower_bounds)*npr.rand(num_params)
     print "seed:", seed
     print "x0:", x0
@@ -73,12 +74,12 @@ def run_cmaes(seed):
     res = es.result()
     best_params = res[0]
     ap.LoadStateVariables()
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.plot(times, expt_trace)
-    ax.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
-    fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
-    plt.close()
+    #fig = plt.figure()
+    #ax = fig.add_subplot(111)
+    #ax.plot(times, expt_trace)
+    #ax.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
+    #fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
+    #plt.close()
     temp_params_file = "gary_decker_expt_0_different_seeds_best_fit_params.txt".format(expt)
     np.savetxt(temp_params_file, best_params)
     print "best_params:", best_params
