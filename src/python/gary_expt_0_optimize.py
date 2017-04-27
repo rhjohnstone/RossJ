@@ -5,12 +5,13 @@ import ap_simulator
 #import matplotlib
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import cma
+import scipy.optimize as so
 import multiprocessing as mp
+import time
 
 
 def sum_of_square_diffs(temp_params, expt_trace):
-    if np.any(temp_params < lower_bounds) or np.any(temp_params > upper_bounds):
+    if np.any(temp_params < 0):
         return 1e9
     else:
         ap.LoadStateVariables()
@@ -28,9 +29,6 @@ num_solves = 5
 
 params_file = "gary_decker_params.txt"
 traces_file = "gary_decker_traces.txt"
-
-seed = 2
-npr.seed(seed)
 
 model_number = 8  # Decker dog
 original_gs, g_parameters = ms.get_original_params(model_number)
@@ -55,46 +53,39 @@ traces = np.loadtxt(traces_file)
 
 num_expts, num_params = params.shape
 
-def run_cmaes(seed):
-    expt = 0
+def run_opt(expt):
+    start = time.time()
     expt_trace = traces[expt]
-    opts = cma.CMAOptions()
-    #opts['seed'] = seed
-    npr.seed(seed)
-    x0 = lower_bounds + (upper_bounds-lower_bounds)*npr.rand(num_params)
-    print "seed:", seed
+    #npr.seed(seed)
+    #x0 = lower_bounds + (upper_bounds-lower_bounds)*npr.rand(num_params)
+    x0 = original_gs
+    print "expt:", expt
     print "x0:", x0
-    sigma0 = 0.0001
-    es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
-    while not es.stop():
-        X = es.ask()
-        f_vals = [sum_of_square_diffs(x, expt_trace) for x in X]
-        es.tell(X, f_vals)
-        es.disp()
-    res = es.result()
-    best_params = res[0]
-    ap.LoadStateVariables()
+    res = so.minimize(sum_of_square_diffs, x0, args=(expt_trace), method='Nelder-Mead')
+    #ap.LoadStateVariables()
     #fig = plt.figure()
     #ax = fig.add_subplot(111)
     #ax.plot(times, expt_trace)
     #ax.plot(times, ap.SolveForVoltageTraceWithParams(best_params))
     #fig.savefig("gary_decker_expt_{}_best_fit.png".format(expt))
     #plt.close()
-    temp_params_file = "gary_decker_expt_0_different_seeds_best_fit_params.txt".format(expt)
-    np.savetxt(temp_params_file, best_params)
+    temp_params_file = "gary_decker_e_{}_optimize_best_fit_params.txt".format(expt)
+    best_params = res.x
+    best_f = res.fun
+    np.savetxt(temp_params_file, np.concatenate((best_params,[best_f])))
     print "best_params:", best_params
-    print "best sos:", res[1],"\n"
+    print "best sos:", best_f,"\n"
+    print "Time taken: {} s".format(round(time.time()-start,2))
     return best_params
     
+
 num_processors = 3
 pool = mp.Pool(num_processors)
-first_seed = 10
-how_many_seeds = 10
-results = pool.map_async(run_cmaes,range(first_seed,first_seed+how_many_seeds)).get(9999999)
+expts = range(120)
+results = pool.map_async(run_opt, expts).get(9999999)
 pool.close()
 
 all_best_params = np.array(results)
-best_params_file = "gary_decker_expt_0_different_seeds_best_fits.txt"
-with open(best_params_file,"a") as outfile:
-    np.savetxt(outfile, all_best_params)
+best_params_file = "gary_decker_optimize_best_fits.txt"
+np.savetxt(best_params_file, all_best_params)
 
