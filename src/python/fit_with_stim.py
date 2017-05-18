@@ -9,9 +9,10 @@ import mcmc_setup as ms
 import cma
 import multiprocessing as mp
 import itertools as it
+import scipy.optimize as so
 import sys
 
-python_seed = int(sys.argv[1])
+python_seed = 1
 trace_number = 97
 npr.seed(python_seed)
 
@@ -79,7 +80,7 @@ data_clamp_off = 52
 
 extra_K_conc = 4
 
-num_solves = 5
+num_solves = 1
 
 original_gs, g_parameters = ms.get_original_params(model_number)
 #upper_bounds = prior_upper_bounds(original_gs)
@@ -110,6 +111,7 @@ def sum_of_square_diffs(params):#,expt_trace,upper_bounds,ap):
     if np.any(params<0) or np.any(params>upper_bounds):
         #print test_gs
         return np.inf
+    ap.LoadStateVariables()
     test_trace = ap.SolveForVoltageTraceWithParams(params)
     return np.sum((test_trace-expt_trace)**2)
     
@@ -138,9 +140,9 @@ sigma0 = 0.00001
 es = cma.CMAEvolutionStrategy(x0, sigma0, opts)
 while not es.stop():
     X = es.ask()
-    f_vals = pool.map_async(sum_of_square_diffs,X).get(9999)
+    #f_vals = pool.map_async(sum_of_square_diffs,X).get(9999999)
     #f_vals = pool.map_async(normalised_sum_of_square_diffs,X).get(9999)
-    #temp_vals = [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X]
+    f_vals = [sum_of_square_diffs(x,expt_trace,upper_bounds,ap) for x in X]
     es.tell(X, f_vals)
     es.disp()
 pool.close()

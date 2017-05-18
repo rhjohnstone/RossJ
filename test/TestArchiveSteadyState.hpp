@@ -68,19 +68,23 @@ public:
         
         double solve_start = 0, solve_end = 400, solve_timestep = 0.1;
     
-        unsigned model_number = 8u; // 8. Decker 2009 dog
-    
-        APSimulator simulator;
-        
-        simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
-        simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
-        simulator.DefineModel(model_number);
-        
-        bool result = simulator.RunToSteadyState();
-        TS_ASSERT_EQUALS(result,true);
-        
-        simulator.ArchiveStateVariables();
-
+        for (unsigned model_number=1u; model_number<8u; model_number++) // 8. Decker 2009 dog
+        {
+            APSimulator simulator;
+            
+            simulator.DefineStimulus( stimulus_magnitude, stimulus_duration, stimulus_period, stimulus_start_time );
+            simulator.DefineSolveTimes(solve_start, solve_end, solve_timestep);
+            simulator.DefineModel(model_number);
+            
+            bool result = simulator.RunToSteadyState();
+            //TS_ASSERT_EQUALS(result,true);
+            if (not result)
+            {
+                std::cout << "Model " << model_number << " did not reach steady state" << std::endl << std::flush;
+            }
+            
+            simulator.ArchiveStateVariables();
+        }
 #else
         std::cout << "Cvode is not enabled.\n";
 #endif

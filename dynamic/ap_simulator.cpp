@@ -78,6 +78,7 @@ BOOST_PYTHON_MODULE(_chaste_project_RossJ_ap_simulator)
         .def("SetExtracellularPotassiumConc", &APSimulator::SetExtracellularPotassiumConc)
         .def("SetNumberOfSolves", &APSimulator::SetNumberOfSolves)
         .def("LoadStateVariables", &APSimulator::LoadStateVariables)
+        .def("SetToModelInitialConditions", &APSimulator::SetToModelInitialConditions)
     ;
 
     PythonIterableToStl()

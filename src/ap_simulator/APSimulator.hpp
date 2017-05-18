@@ -47,6 +47,7 @@ public:
     bool RunToSteadyState();
     void ArchiveStateVariables();
     void LoadStateVariables();
+    void SetToModelInitialConditions();
 };
 
 

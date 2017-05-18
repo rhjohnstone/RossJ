@@ -192,6 +192,11 @@ std::vector<std::string> APSimulator::GetParameterMetanames()
     return mParameterMetanames;
 }
 
+void APSimulator::SetToModelInitialConditions()
+{
+    mpModel->SetStateVariables(mpModel->GetInitialConditions());
+}
+
 std::vector<double> APSimulator::SolveForVoltageTraceWithParamsNoDataClamp(const std::vector<double>& rParams)
 {
     //std::cerr << "About to try and solve" << std::endl << std::flush;
@@ -357,7 +362,7 @@ void APSimulator::SetNumberOfSolves( unsigned num_solves )
 bool APSimulator::RunToSteadyState()
 {
     SteadyStateRunner steady_runner(mpModel);
-    unsigned max_paces = 10000u;
+    unsigned max_paces = 50000u;
     steady_runner.SetMaxNumPaces(max_paces);
     bool result = steady_runner.RunToSteadyState();
     mHaveRunToSteadyState = result;
@@ -387,7 +392,7 @@ void APSimulator::ArchiveStateVariables()
 void APSimulator::LoadStateVariables()
 {
     std::string arch_file = "~/workspace/RossJ/archived_variables/steady_state/m_"+boost::lexical_cast<std::string>(mModelNumber)+".arch";
-    //std::cout << arch_file << std::endl << std::flush;
+    std::cout << arch_file << std::endl << std::flush;
     std::ifstream ifs(arch_file.c_str(), std::ios::binary);
     boost::archive::text_iarchive input_arch(ifs);
     input_arch >> *mpModel;
