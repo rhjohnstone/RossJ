@@ -24,6 +24,7 @@
 #include "davies_isap_2012CvodeDataClamp.hpp"
 //#include "davies_isap_2012Cvode.hpp"
 #include "paci_hyttinen_aaltosetala_severi_ventricularVersionCvodeDataClamp.hpp"
+#include "gokhale_ex293_2017Cvode.hpp"
 
 APSimulator::APSimulator()
     : mModelNumber(1),
@@ -177,6 +178,16 @@ void APSimulator::DefineModel(unsigned model_number)
     else if ( model_number == 8u ) // Decker dog
     {
         mpModel.reset(new Celldecker_2009FromCellMLCvode(p_solver, mpStimulus));
+        mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");  // 9.075
+        mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");  //  0.00015552
+        mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");  // 0.5
+        mParameterMetanames.push_back("membrane_slow_delayed_rectifier_potassium_current_conductance");  // 0.0826
+        mParameterMetanames.push_back("membrane_rapid_delayed_rectifier_potassium_current_conductance");  // 0.0138542
+        mParameterMetanames.push_back("membrane_transient_outward_current_conductance");  // 0.497458
+    }
+    else if ( model_number == 9u ) // Gokhale 2017
+    {
+        mpModel.reset(new Cellgokhale_ex293_2017FromCellMLCvode(p_solver, mpStimulus));
         mParameterMetanames.push_back("membrane_fast_sodium_current_conductance");  // 9.075
         mParameterMetanames.push_back("membrane_L_type_calcium_current_conductance");  //  0.00015552
         mParameterMetanames.push_back("membrane_inward_rectifier_potassium_current_conductance");  // 0.5
