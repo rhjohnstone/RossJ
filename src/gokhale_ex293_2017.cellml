@@ -31,8 +31,8 @@
         <variable cmeta:id="extracellular_potassium_concentration" initial_value="5.4" name="K_ext" public_interface="out" units="millimolar"/>
     </component>
     <component name="reversal_potentials">
-        <variable initial_value="61.6" name="E_Na" public_interface="out" units="mV"/>
-        <variable initial_value="-75.3" name="E_K" public_interface="out" units="mV"/>
+        <variable cmeta:id="sodium_reversal_potential" initial_value="61.6" name="E_Na" public_interface="out" units="mV"/>
+        <variable cmeta:id="potassium_reversal_potential" initial_value="-75.3" name="E_K" public_interface="out" units="mV"/>
     </component>
     <component name="membrane">
         <variable cmeta:id="membrane_voltage" initial_value="-74.2149465972944" name="V" public_interface="out" units="mV"/>
@@ -1102,29 +1102,69 @@
     </connection>
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:oxmeta="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"><rdf:Description rdf:about="#time"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#time"/></rdf:Description><rdf:Description rdf:about="#membrane_voltage"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_voltage"/></rdf:Description><rdf:Description rdf:about="#membrane_capacitance"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_capacitance"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_conductance"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_shift_inactivation"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_shift_inactivation"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_reduced_inactivation"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_reduced_inactivation"/></rdf:Description><rdf:Description rdf:about="#sodium_reversal_potential"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#sodium_reversal_potential"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_m_gate"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_m_gate"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_h_gate"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_h_gate"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_h_gate_tau"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_h_gate_tau"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_j_gate"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_j_gate"/></rdf:Description><rdf:Description rdf:about="#membrane_fast_sodium_current_j_gate_tau"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_j_gate_tau"/></rdf:Description><rdf:Description rdf:about="#membrane_L_type_calcium_current"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_L_type_calcium_current"/></rdf:Description><rdf:Description rdf:about="#membrane_L_type_calcium_current_conductance"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_L_type_calcium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#cytosolic_calcium_concentration"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#cytosolic_calcium_concentration"/></rdf:Description><rdf:Description rdf:about="#membrane_L_type_calcium_current_d_gate"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_L_type_calcium_current_d_gate"/></rdf:Description><rdf:Description rdf:about="#membrane_L_type_calcium_current_f_gate"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_L_type_calcium_current_f_gate"/></rdf:Description><rdf:Description rdf:about="#membrane_rapid_delayed_rectifier_potassium_current"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_rapid_delayed_rectifier_potassium_current"/></rdf:Description><rdf:Description rdf:about="#membrane_rapid_delayed_rectifier_potassium_current_conductance"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_rapid_delayed_rectifier_potassium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#membrane_inward_rectifier_potassium_current"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_inward_rectifier_potassium_current"/></rdf:Description><rdf:Description rdf:about="#membrane_inward_rectifier_potassium_current_conductance"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_inward_rectifier_potassium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#membrane_stimulus_current"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current"/></rdf:Description><rdf:Description rdf:about="#membrane_stimulus_current_offset"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_offset"/></rdf:Description><rdf:Description rdf:about="#membrane_stimulus_current_amplitude"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_amplitude"/></rdf:Description><rdf:Description rdf:about="#membrane_stimulus_current_period"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_period"/></rdf:Description><rdf:Description rdf:about="#membrane_stimulus_current_duration"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_duration"/></rdf:Description><rdf:Description rdf:about="#transfected_sodium_current_G_Na"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#endogenous_sodium_current_I_Na_wt"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_sodium_current"/></rdf:Description><rdf:Description rdf:about="#endogenous_sodium_current_G_Na_wt"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_sodium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#endogenous_potassium_current_I_K_wt"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_potassium_current"/></rdf:Description><rdf:Description rdf:about="#endogenous_potassium_current_G_K_wt"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_potassium_current_conductance"/></rdf:Description><rdf:Description rdf:about="#extracellular_potassium_concentration"><bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#extracellular_potassium_concentration"/></rdf:Description></rdf:RDF></model>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:oxmeta="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<rdf:Description rdf:about="#time">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#time"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_voltage">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_voltage"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_capacitance">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_capacitance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_fast_sodium_current">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_fast_sodium_current_conductance">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#sodium_reversal_potential">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#sodium_reversal_potential"/>
+</rdf:Description>
+<rdf:Description rdf:about="#potassium_reversal_potential">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#potassium_reversal_potential"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_fast_sodium_current_m_gate">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_m_gate"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_inward_rectifier_potassium_current">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_inward_rectifier_potassium_current"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_inward_rectifier_potassium_current_conductance">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_inward_rectifier_potassium_current_conductance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_stimulus_current">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_stimulus_current_offset">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_offset"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_stimulus_current_amplitude">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_amplitude"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_stimulus_current_period">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_period"/>
+</rdf:Description>
+<rdf:Description rdf:about="#membrane_stimulus_current_duration">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_stimulus_current_duration"/>
+</rdf:Description>
+<rdf:Description rdf:about="#transfected_sodium_current_G_Na">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#endogenous_sodium_current_I_Na_wt">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_sodium_current"/>
+</rdf:Description>
+<rdf:Description rdf:about="#endogenous_sodium_current_G_Na_wt">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_sodium_current_conductance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#endogenous_potassium_current_I_K_wt">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_potassium_current"/>
+</rdf:Description>
+<rdf:Description rdf:about="#endogenous_potassium_current_G_K_wt">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_background_potassium_current_conductance"/>
+</rdf:Description>
+<rdf:Description rdf:about="#extracellular_potassium_concentration">
+<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#extracellular_potassium_concentration"/>
+</rdf:Description>
+</rdf:RDF>
+</model>
