@@ -1115,9 +1115,6 @@
 <rdf:Description rdf:about="#membrane_fast_sodium_current">
 <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current"/>
 </rdf:Description>
-<rdf:Description rdf:about="#membrane_fast_sodium_current_conductance">
-<bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_fast_sodium_current_conductance"/>
-</rdf:Description>
 <rdf:Description rdf:about="#sodium_reversal_potential">
 <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#sodium_reversal_potential"/>
 </rdf:Description>
