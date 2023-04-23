@@ -74,7 +74,7 @@
     <component name="transfected_sodium_current">
         <variable cmeta:id="membrane_fast_sodium_current" name="I_Na" public_interface="out" units="uA_per_cm2"/>
         <variable name="E_Na" public_interface="in" units="mV"/>
-        <variable xmlns:ns4166699="http://www.cellml.org/metadata/1.0#" initial_value="90.34" name="G_Na" units="mS_per_cm2" ns4166699:id="transfected_sodium_current_G_Na"/>
+        <variable initial_value="90.34" name="G_Na" units="mS_per_cm2" cmeta:id="transfected_sodium_current_G_Na" public_interface="out"/>
         <variable name="time" private_interface="out" public_interface="in" units="ms"/>
         <variable name="V" private_interface="out" public_interface="in" units="mV"/>
         <variable name="m" private_interface="in" units="dimensionless"/>
